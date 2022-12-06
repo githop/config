@@ -1,0 +1,9 @@
+# hide everything
+*
+!*/
+
+# allowed list
+!.gitignore
+
+!nvim/**
+!kitty/**
