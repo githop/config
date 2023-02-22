@@ -39,7 +39,7 @@ return packer.startup(function(use)
 	use({ "akinsho/bufferline.nvim", tag = "v3.*" })
 	-- fuzzy finding w/ telescope
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependency for better sorting performance
-	use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" }) -- fuzzy finder
+	use({ "nvim-telescope/telescope.nvim", tag = "0.1.1" }) -- fuzzy finder
 	-- autocompletion
 	use("hrsh7th/nvim-cmp") -- completion plugin
 	use("hrsh7th/cmp-buffer") -- source for text in buffer
