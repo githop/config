@@ -19,15 +19,15 @@ end
 mason.setup()
 
 mason_lspconfig.setup({
-  ensure_installed = {
-    "tsserver",
-    "html",
-    "cssls",
-    "graphql",
-    "jsonls",
-    "sumneko_lua"
-  },
-  automatic_installation = true,
+	ensure_installed = {
+		"tsserver",
+		"html",
+		"cssls",
+		"graphql",
+		"jsonls",
+		"lua_ls",
+	},
+	automatic_installation = true,
 })
 
 mason_null_ls.setup({
