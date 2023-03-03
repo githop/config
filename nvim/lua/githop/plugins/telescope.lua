@@ -1,16 +1,21 @@
 local tel_setup, telescope = pcall(require, "telescope")
 if not tel_setup then
-  return
+	return
 end
 
 local actions_setup, actions = pcall(require, "telescope.actions")
 if not actions_setup then
-  return
+	return
 end
 
 telescope.setup({
 	-- configure custom mappings
 	defaults = {
+		layout_strategy = "vertical",
+		layout_config = {
+			height = 0.95,
+			width = 0.95,
+		},
 		mappings = {
 			i = {
 				["<C-k>"] = actions.move_selection_previous, -- move to prev result
