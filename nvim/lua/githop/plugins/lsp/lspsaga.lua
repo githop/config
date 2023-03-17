@@ -4,4 +4,11 @@ if not saga_status then
 	return
 end
 
-saga.setup({})
+saga.setup({
+	diagnostic = {
+		on_insert = false,
+	},
+	ui = {
+		border = "rounded",
+	},
+})
