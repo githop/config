@@ -4,6 +4,5 @@ if not status then
 end
 
 -- get lualine nightfly theme
-local lualine_everforest = require("lualine.themes.everforest")
 
-lualine.setup({ options = { theme = lualine_everforest } })
+lualine.setup()
