@@ -29,8 +29,8 @@ return packer.startup(function(use)
 	-- My plugins here
 
 	use("rebelot/kanagawa.nvim") -- colorscheme
-	use("tpope/vim-surround")
 	use("vim-scripts/ReplaceWithRegister")
+	use({ "kylechui/nvim-surround", tag = "*" })
 	use("numToStr/Comment.nvim")
 	use("nvim-lua/plenary.nvim")
 	use("nvim-tree/nvim-tree.lua")
