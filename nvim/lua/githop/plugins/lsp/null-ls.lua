@@ -16,12 +16,12 @@ local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 null_ls.setup({
 	-- setup formatters & linters
 	sources = {
-		formatting.prettier, -- js/ts formatter
-		formatting.stylua, -- lua formatter
+		formatting.prettier,
+		formatting.stylua,
 		diagnostics.eslint_d,
 		diagnostics.stylelint,
-		code_actions.gitsigns,
 		code_actions.eslint_d,
+		code_actions.gitsigns,
 	},
 	-- configure format on save
 	on_attach = function(current_client, bufnr)
