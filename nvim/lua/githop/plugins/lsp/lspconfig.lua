@@ -102,3 +102,8 @@ lspconfig["solargraph"].setup({
 	capabilities = capabilities,
 	on_attach = on_attach,
 })
+
+lspconfig["graphql"].setup({
+	capabilities = capabilities,
+	on_attach = on_attach,
+})
