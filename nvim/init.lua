@@ -45,13 +45,12 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
   },
-
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -62,6 +61,8 @@ require('lazy').setup({
 
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
@@ -69,7 +70,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',          opts = {} },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -113,7 +114,7 @@ require('lazy').setup({
     },
   },
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',         opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -201,6 +202,16 @@ require('lazy').setup({
   {
     'creativenull/efmls-configs-nvim',
   },
+  {
+    "kylechui/nvim-surround",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup({
+        -- Configuration here, or leave empty to use defaults
+      })
+    end
+  }
 }, {})
 
 -- [[ Setting options ]]
@@ -264,9 +275,13 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 -- clear search highlights
 vim.keymap.set('n', '<leader>nh', ':nohl<CR>', { desc = 'Clear search highlights' })
 
--- switch buffers
-vim.keymap.set('n', '<leader>[', ':bp<CR>', { desc = 'Previous buffer' })
-vim.keymap.set('n', '<leader>]', ':bn<CR>', { desc = 'Next buffer' })
+--window management
+vim.keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
+vim.keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make split windows equal width and height" })
+vim.keymap.set("n", "<leader>sx", ":close<CR>", { desc = "Close current split window" })
+vim.keymap.set("n", "<leader>[", ":bp<CR>", { desc = "Previous buffer" })
+vim.keymap.set("n", "<leader>]", ":bn<CR>", { desc = "Next buffer" })
 
 -- move selection
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
@@ -441,6 +456,9 @@ local servers = {
   eslint = {},
   tsserver = {},
   efm = {},
+  html = {},
+  cssls = {},
+  jsonls = {},
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -482,7 +500,18 @@ efmls.init {
     documentFormatting = true,
   },
 }
-efmls.setup {}
+local eslint = require 'efmls-configs.linters.eslint'
+local prettier = require 'efmls-configs.formatters.prettier'
+efmls.setup {
+  typescript = {
+    linter = eslint,
+    formatter = prettier,
+  },
+  typescriptreact = {
+    linter = eslint,
+    formatter = prettier,
+  }
+}
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
