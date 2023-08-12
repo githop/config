@@ -45,7 +45,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -70,7 +70,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',          opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -114,7 +114,7 @@ require('lazy').setup({
     },
   },
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',         opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
@@ -157,7 +157,7 @@ require('lazy').setup({
           enabled = true,
         },
         window = {
-          position = 'right',
+          position = 'float',
         },
         filesystem = {
           filtered_items = {
@@ -203,15 +203,21 @@ require('lazy').setup({
     'creativenull/efmls-configs-nvim',
   },
   {
-    "kylechui/nvim-surround",
-    version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
+    'kylechui/nvim-surround',
+    version = '*', -- Use for stability; omit to use `main` branch for the latest features
+    event = 'VeryLazy',
     config = function()
-      require("nvim-surround").setup({
+      require('nvim-surround').setup {
         -- Configuration here, or leave empty to use defaults
-      })
-    end
-  }
+      }
+    end,
+  },
+  {
+    'sindrets/diffview.nvim',
+    config = function()
+      require('diffview').setup {}
+    end,
+  },
 }, {})
 
 -- [[ Setting options ]]
@@ -276,12 +282,12 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', '<leader>nh', ':nohl<CR>', { desc = 'Clear search highlights' })
 
 --window management
-vim.keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
-vim.keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
-vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make split windows equal width and height" })
-vim.keymap.set("n", "<leader>sx", ":close<CR>", { desc = "Close current split window" })
-vim.keymap.set("n", "<leader>[", ":bp<CR>", { desc = "Previous buffer" })
-vim.keymap.set("n", "<leader>]", ":bn<CR>", { desc = "Next buffer" })
+vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = 'Split window vertically' })
+vim.keymap.set('n', '<leader>sh', '<C-w>s', { desc = 'Split window horizontally' })
+vim.keymap.set('n', '<leader>se', '<C-w>=', { desc = 'Make split windows equal width and height' })
+vim.keymap.set('n', '<leader>sx', ':close<CR>', { desc = 'Close current split window' })
+vim.keymap.set('n', '<leader>[', ':bp<CR>', { desc = 'Previous buffer' })
+vim.keymap.set('n', '<leader>]', ':bn<CR>', { desc = 'Next buffer' })
 
 -- move selection
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
@@ -291,7 +297,7 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
-vim.keymap.set('n', '<leader>e', ':Neotree toggle current right reveal_force_cwd<cr>', { desc = 'Toggle Neotree' })
+vim.keymap.set('n', '<leader>e', ':Neotree toggle current float reveal_force_cwd<cr>', { desc = 'Toggle Neotree' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -512,7 +518,7 @@ efmls.setup {
   typescriptreact = {
     linter = eslint,
     formatter = prettier,
-  }
+  },
 }
 
 -- [[ Configure nvim-cmp ]]
