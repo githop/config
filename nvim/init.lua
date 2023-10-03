@@ -234,15 +234,6 @@ require('lazy').setup({
     end,
   },
   {
-    'lukas-reineke/lsp-format.nvim',
-    config = function()
-      require('lsp-format').setup {}
-    end,
-  },
-  {
-    'creativenull/efmls-configs-nvim',
-  },
-  {
     'kylechui/nvim-surround',
     version = '*', -- Use for stability; omit to use `main` branch for the latest features
     event = 'VeryLazy',
@@ -258,6 +249,48 @@ require('lazy').setup({
       require('diffview').setup {}
     end,
   },
+  {
+    'nvimtools/none-ls.nvim',
+    opts = function()
+      local null_ls = require('null-ls');
+      local formatting = null_ls.builtins.formatting     -- to setup formatters
+      local diagnostics = null_ls.builtins.diagnostics   -- to setup linters
+      local code_actions = null_ls.builtins.code_actions -- to setup code actions
+
+      -- to setup format on save
+      local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+      -- configure null_ls
+      null_ls.setup({
+        sources = {
+          formatting.prettier,
+          formatting.stylua,
+          diagnostics.eslint_d,
+          diagnostics.stylelint,
+          code_actions.eslint_d,
+          code_actions.gitsigns,
+        },
+        -- configure format on save
+        on_attach = function(client, bufnr)
+          if client.supports_method("textDocument/formatting") then
+            vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              group = augroup,
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.buf.format({
+                  bufnr = bufnr,
+                  filter = function(c)
+                    return c.name == 'null-ls'
+                  end
+                })
+              end
+            })
+          end
+        end,
+      })
+    end,
+  }
 }, {})
 
 -- [[ Setting options ]]
@@ -516,7 +549,6 @@ require('which-key').register({
 local servers = {
   eslint = {},
   tsserver = {},
-  efm = {},
   html = { filetypes = { 'html', 'hbs' } },
   cssls = {},
   jsonls = {},
@@ -553,11 +585,6 @@ mason_lspconfig.setup_handlers {
     }
   end,
 }
-
--- [[ Configure efm ]]
-local efmls_configs_langauges = require 'efmls-configs.defaults'
-efmls_configs_langauges.languages()
-
 
 -- [[ Configure nvim-cmp ]]
 -- See `:help cmp`
