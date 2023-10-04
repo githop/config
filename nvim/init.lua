@@ -88,15 +88,23 @@ require('lazy').setup({
         -- don't override the built-in and fugitive keymaps
         local gs = package.loaded.gitsigns
         vim.keymap.set({ 'n', 'v' }, ']c', function()
-          if vim.wo.diff then return ']c' end
-          vim.schedule(function() gs.next_hunk() end)
+          if vim.wo.diff then
+            return ']c'
+          end
+          vim.schedule(function()
+            gs.next_hunk()
+          end)
           return '<Ignore>'
-        end, { expr = true, buffer = bufnr, desc = "Jump to next hunk" })
+        end, { expr = true, buffer = bufnr, desc = 'Jump to next hunk' })
         vim.keymap.set({ 'n', 'v' }, '[c', function()
-          if vim.wo.diff then return '[c' end
-          vim.schedule(function() gs.prev_hunk() end)
+          if vim.wo.diff then
+            return '[c'
+          end
+          vim.schedule(function()
+            gs.prev_hunk()
+          end)
           return '<Ignore>'
-        end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
+        end, { expr = true, buffer = bufnr, desc = 'Jump to previous hunk' })
       end,
     },
   },
@@ -109,9 +117,9 @@ require('lazy').setup({
         overrides = function(colors)
           local theme = colors.theme
           return {
-            NormalFloat = { bg = "none" },
-            FloatBorder = { bg = "none" },
-            FloatTitle = { bg = "none" },
+            NormalFloat = { bg = 'none' },
+            FloatBorder = { bg = 'none' },
+            FloatTitle = { bg = 'none' },
 
             -- Save an hlgroup with dark background and dimmed foreground
             -- so that you can use it where your still want darker windows.
@@ -123,7 +131,7 @@ require('lazy').setup({
             LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
             MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
           }
-        end
+        end,
       }
     end,
   },
@@ -252,16 +260,16 @@ require('lazy').setup({
   {
     'nvimtools/none-ls.nvim',
     opts = function()
-      local null_ls = require('null-ls');
+      local null_ls = require 'null-ls'
       local formatting = null_ls.builtins.formatting     -- to setup formatters
       local diagnostics = null_ls.builtins.diagnostics   -- to setup linters
       local code_actions = null_ls.builtins.code_actions -- to setup code actions
 
       -- to setup format on save
-      local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+      local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 
       -- configure null_ls
-      null_ls.setup({
+      null_ls.setup {
         sources = {
           formatting.prettier,
           formatting.stylua,
@@ -272,25 +280,25 @@ require('lazy').setup({
         },
         -- configure format on save
         on_attach = function(client, bufnr)
-          if client.supports_method("textDocument/formatting") then
-            vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-            vim.api.nvim_create_autocmd("BufWritePre", {
+          if client.supports_method 'textDocument/formatting' then
+            vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+            vim.api.nvim_create_autocmd('BufWritePre', {
               group = augroup,
               buffer = bufnr,
               callback = function()
-                vim.lsp.buf.format({
+                vim.lsp.buf.format {
                   bufnr = bufnr,
                   filter = function(c)
                     return c.name == 'null-ls'
-                  end
-                })
-              end
+                  end,
+                }
+              end,
             })
           end
         end,
-      })
+      }
     end,
-  }
+  },
 }, {})
 
 -- [[ Setting options ]]
@@ -536,14 +544,14 @@ local on_attach = function(client, bufnr)
 end
 
 -- document existing key chains
-require('which-key').register({
+require('which-key').register {
   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
   ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-})
+}
 
 -- Enable the following language servers
 local servers = {
