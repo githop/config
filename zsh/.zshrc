@@ -46,5 +46,8 @@ zinit lucid from"gh-r" as"command" for \
         @sharkdp/bat \
         @junegunn/fzf 
 
+zi for \
+    https://github.com/junegunn/fzf/raw/master/shell/{'completion','key-bindings'}.zsh 
+
 # configure rbenv 
     eval "$(rbenv init - zsh)"
