@@ -258,44 +258,58 @@ require('lazy').setup({
     end,
   },
   {
-    'nvimtools/none-ls.nvim',
-    opts = function()
-      local null_ls = require 'null-ls'
-      local formatting = null_ls.builtins.formatting     -- to setup formatters
-      local diagnostics = null_ls.builtins.diagnostics   -- to setup linters
-      local code_actions = null_ls.builtins.code_actions -- to setup code actions
+    'mfussenegger/nvim-lint',
+    lazy = true,
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function()
+      local lint = require 'lint'
 
-      -- to setup format on save
-      local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+      lint.linters_by_ft = {
+        javascript = { 'eslint_d' },
+        typescript = { 'eslint_d' },
+        javascriptreact = { 'eslint_d' },
+        typescriptreact = { 'eslint_d' },
+        scss = { 'stylelint' },
+        ruby = { 'rubocop' },
+      }
 
-      -- configure null_ls
-      null_ls.setup {
-        sources = {
-          formatting.prettier,
-          formatting.stylua,
-          diagnostics.eslint_d,
-          diagnostics.stylelint,
-          code_actions.eslint_d,
-          code_actions.gitsigns,
-        },
-        -- configure format on save
-        on_attach = function(client, bufnr)
-          if client.supports_method 'textDocument/formatting' then
-            vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              group = augroup,
-              buffer = bufnr,
-              callback = function()
-                vim.lsp.buf.format {
-                  bufnr = bufnr,
-                  filter = function(c)
-                    return c.name == 'null-ls'
-                  end,
-                }
-              end,
-            })
-          end
+      local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
+
+      vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
+        group = lint_augroup,
+        callback = function()
+          lint.try_lint()
         end,
+      })
+    end,
+  },
+  {
+    'stevearc/conform.nvim',
+    lazy = true,
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function()
+      local conform = require 'conform'
+
+      conform.setup {
+        formatters_by_ft = {
+          javascript = { 'prettier' },
+          typescript = { 'prettier' },
+          javascriptreact = { 'prettier' },
+          typescriptreact = { 'prettier' },
+          css = { 'prettier' },
+          html = { 'prettier' },
+          json = { 'prettier' },
+          yaml = { 'prettier' },
+          markdown = { 'prettier' },
+          graphql = { 'prettier' },
+          lua = { 'stylua' },
+          ruby = { 'rubocop' },
+        },
+        format_on_save = {
+          lsp_fallback = true,
+          async = false,
+          timeout_ms = 1000,
+        },
       }
     end,
   },
@@ -518,10 +532,10 @@ local on_attach = function(client, bufnr)
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+  nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-  nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
+  nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+  nmap('<leader>D', require('telescope.builtin').lsp_definitions, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
