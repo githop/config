@@ -21,7 +21,12 @@ setopt promptsubst
 zinit wait lucid for \
         OMZL::git.zsh \
   atload"unalias grv" \
-        OMZP::git
+        OMZP::git \
+        https://github.com/junegunn/fzf/raw/master/shell/{'completion','key-bindings'}.zsh \
+        https://github.com/junegunn/fzf-git.sh/blob/main/fzf-git.sh \
+  as"program" \
+        https://github.com/junegunn/fzf/blob/master/bin/fzf-tmux
+
 
 # zsh syntax highlighting, suggestions, completions
 zinit wait lucid for \
@@ -44,10 +49,9 @@ zinit lucid from"gh-r" as"command" for \
         export MANPAGER="bat --plain"
     ' \
         @sharkdp/bat \
-        @junegunn/fzf 
-
-zi for \
-    https://github.com/junegunn/fzf/raw/master/shell/{'completion','key-bindings'}.zsh 
+        @junegunn/fzf \
+    mv'**/delta -> delta' \
+        @dandavison/delta
 
 # configure rbenv 
     eval "$(rbenv init - zsh)"
