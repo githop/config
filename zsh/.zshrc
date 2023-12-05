@@ -18,7 +18,7 @@ zinit load starship/starship
 setopt promptsubst
 
 # Oh my zshell git plugin
-zinit wait lucid for \
+zinit lucid for \
         OMZL::git.zsh \
   atload"unalias grv" \
         OMZP::git \
@@ -55,3 +55,8 @@ zinit lucid from"gh-r" as"command" for \
 
 # configure rbenv 
     eval "$(rbenv init - zsh)"
+
+# load custom scripts
+for FILE in ~/.config/zsh/scripts/*; do
+    source $FILE
+done
