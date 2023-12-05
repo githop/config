@@ -53,6 +53,7 @@ require('lazy').setup({
       'folke/neodev.nvim',
     },
   },
+
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -73,6 +74,7 @@ require('lazy').setup({
 
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim',  opts = {} },
+
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -146,6 +148,7 @@ require('lazy').setup({
       end,
     },
   },
+
   {
     'rebelot/kanagawa.nvim',
     priority = 1000,
@@ -173,6 +176,7 @@ require('lazy').setup({
       }
     end,
   },
+
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
@@ -186,6 +190,7 @@ require('lazy').setup({
       },
     },
   },
+
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
@@ -227,8 +232,6 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
   {
     'nvim-neo-tree/neo-tree.nvim',
     version = '*',
@@ -255,6 +258,7 @@ require('lazy').setup({
       }
     end,
   },
+
   {
     'akinsho/bufferline.nvim',
     version = '*',
@@ -267,6 +271,7 @@ require('lazy').setup({
       }
     end,
   },
+
   {
     'windwp/nvim-autopairs',
     -- Optional dependency
@@ -279,6 +284,7 @@ require('lazy').setup({
       cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
     end,
   },
+
   {
     'kylechui/nvim-surround',
     version = '*', -- Use for stability; omit to use `main` branch for the latest features
@@ -289,12 +295,14 @@ require('lazy').setup({
       }
     end,
   },
+
   {
     'sindrets/diffview.nvim',
     config = function()
       require('diffview').setup {}
     end,
   },
+
   {
     'mfussenegger/nvim-lint',
     lazy = true,
@@ -321,6 +329,7 @@ require('lazy').setup({
       })
     end,
   },
+
   {
     'stevearc/conform.nvim',
     lazy = true,
@@ -351,8 +360,11 @@ require('lazy').setup({
       }
     end,
   },
-}, {})
 
+  require 'kickstart.plugins.autoformat',
+  -- require 'kickstart.plugins.debug',
+}, {})
+--
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
