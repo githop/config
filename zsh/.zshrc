@@ -53,9 +53,6 @@ zinit lucid from"gh-r" as"command" for \
     mv'**/delta -> delta' \
         @dandavison/delta
 
-# configure rbenv 
-    eval "$(rbenv init - zsh)"
-
 # load custom scripts
 for FILE in ~/.config/zsh/scripts/*; do
     source $FILE
