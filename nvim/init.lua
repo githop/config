@@ -465,7 +465,7 @@ vim.keymap.set('n', '<leader>sh', require('fzf-lua').help_tags, { desc = '[S]ear
 vim.keymap.set('n', '<leader>sw', require('fzf-lua').grep_cword, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('fzf-lua').diagnostics_document, { desc = '[S]earch [D]iagnostics' })
-vim.keymap.set('v', '<leader>ss', function()
+vim.keymap.set('v', '<leader>sv', function()
   require('fzf-lua').grep_visual { rg_opts = '--multiline' }
 end, { desc = '[S]earch [S]election' })
 vim.keymap.set('n', '<leader>sb', require('fzf-lua').builtin, { desc = '[S]earch [B]uiltin' })
