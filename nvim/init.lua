@@ -557,7 +557,11 @@ local on_attach = function(_, bufnr)
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', require('fzf-lua').lsp_code_actions, '[C]ode [A]ction')
 
-  nmap('gd', require('fzf-lua').lsp_definitions, '[G]oto [D]efinition')
+  nmap('gd', function()
+    require('fzf-lua').lsp_definitions {
+      jump_to_single_result = true,
+    }
+  end, '[G]oto [D]efinition')
   nmap('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
   nmap('gI', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')
   nmap('<leader>D', require('fzf-lua').lsp_type_definitions, 'Type [D]efinition')
