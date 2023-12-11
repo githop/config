@@ -51,7 +51,9 @@ zinit lucid from"gh-r" as"command" for \
         @sharkdp/bat \
         @junegunn/fzf \
     mv'**/delta -> delta' \
-        @dandavison/delta
+        @dandavison/delta \
+    mv'fd* -> fd' pick'fd/fd' \
+        @sharkdp/fd
 
 # configure rbenv 
     eval "$(rbenv init - zsh)"
