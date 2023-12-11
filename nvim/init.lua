@@ -202,7 +202,19 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       -- calling `setup` is optional for customization
-      require('fzf-lua').setup {}
+      require('fzf-lua').setup {
+        previewers = {
+          git_diff = {
+            pager = 'delta --width=$FZF_PREVIEW_COLUMNS',
+          },
+        },
+        lsp = {
+          code_actions = {
+            previewer = 'codeaction_native',
+            preview_pager = 'delta --side-by-side --width=$FZF_PREVIEW_COLUMNS',
+          },
+        },
+      }
     end,
   },
 
@@ -453,6 +465,10 @@ vim.keymap.set('n', '<leader>sh', require('fzf-lua').help_tags, { desc = '[S]ear
 vim.keymap.set('n', '<leader>sw', require('fzf-lua').grep_cword, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('fzf-lua').diagnostics_document, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('v', '<leader>ss', function()
+  require('fzf-lua').grep_visual { rg_opts = '--multiline' }
+end, { desc = '[S]earch [S]election' })
+vim.keymap.set('n', '<leader>sb', require('fzf-lua').builtin, { desc = '[S]earch [B]uiltin' })
 vim.keymap.set('n', '<leader>tr', require('fzf-lua').resume, { desc = '[T]elescope [R]esume' })
 
 -- [[ Configure Treesitter ]]
