@@ -341,6 +341,16 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'vuki656/package-info.nvim',
+    dependencies = {
+      'MunifTanjim/nui.nvim'
+    },
+    config = function()
+      require('package-info').setup {}
+    end
+  },
+
   require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 }, {})
@@ -457,9 +467,12 @@ end, { desc = '[S]earch [S]election' })
 vim.keymap.set('n', '<leader>sb', require('fzf-lua').builtin, { desc = '[S]earch [B]uiltin' })
 vim.keymap.set('n', '<leader>tr', require('fzf-lua').resume, { desc = '[T]elescope [R]esume' })
 
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
--- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
+-- [[ package-info ]]
+vim.keymap.set('n', '<leader>ns', require('package-info').show, { desc = 'Show npm package info' })
+vim.keymap.set('n', '<leader>nt', require('package-info').toggle, { desc = 'Toggle npm package info' })
+vim.keymap.set('n', '<leader>nu', require('package-info').update, { desc = 'Update npm package' })
+vim.keymap.set('n', '<leader>nc', require('package-info').change_version, { desc = 'Change npm package' })
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
