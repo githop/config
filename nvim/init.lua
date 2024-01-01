@@ -73,7 +73,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  { 'folke/which-key.nvim',  opts = {} },
 
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
@@ -147,26 +147,7 @@ require('lazy').setup({
     priority = 1000,
     config = function()
       vim.cmd.colorscheme 'kanagawa'
-      require('kanagawa').setup {
-        overrides = function(colors)
-          local theme = colors.theme
-          return {
-            NormalFloat = { bg = 'none' },
-            FloatBorder = { bg = 'none' },
-            FloatTitle = { bg = 'none' },
-
-            -- Save an hlgroup with dark background and dimmed foreground
-            -- so that you can use it where your still want darker windows.
-            -- E.g.: autocmd TermOpen * setlocal winhighlight=Normal:NormalDark
-            NormalDark = { fg = theme.ui.fg_dim, bg = theme.ui.bg_m3 },
-
-            -- Popular plugins that open floats will link to NormalFloat by default;
-            -- set their background accordingly if you wish to keep them dark and borderless
-            LazyNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
-            MasonNormal = { bg = theme.ui.bg_m3, fg = theme.ui.fg_dim },
-          }
-        end,
-      }
+      require('kanagawa').setup {}
     end,
   },
 
@@ -203,6 +184,10 @@ require('lazy').setup({
     config = function()
       -- calling `setup` is optional for customization
       require('fzf-lua').setup {
+        winopts = {
+          height = 0.9,
+          width = 0.9
+        },
         previewers = {
           git_diff = {
             pager = 'delta --width=$FZF_PREVIEW_COLUMNS',
@@ -356,6 +341,16 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'vuki656/package-info.nvim',
+    dependencies = {
+      'MunifTanjim/nui.nvim'
+    },
+    config = function()
+      require('package-info').setup {}
+    end
+  },
+
   require 'kickstart.plugins.autoformat',
   -- require 'kickstart.plugins.debug',
 }, {})
@@ -460,8 +455,9 @@ vim.keymap.set('n', '<leader>?', require('fzf-lua').oldfiles, { desc = '[?] Find
 vim.keymap.set('n', '<leader><space>', require('fzf-lua').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', require('fzf-lua').lgrep_curbuf, { desc = '[/] Fuzzily search in current buffer' })
 vim.keymap.set('n', '<leader>gf', require('fzf-lua').git_files, { desc = 'Search [G]it [F]iles' })
+vim.keymap.set('n', '<leader>gs', require('fzf-lua').git_status, { desc = '[G]it [S]tatus' })
 vim.keymap.set('n', '<leader>sf', require('fzf-lua').files, { desc = '[S]earch [F]iles' })
-vim.keymap.set('n', '<leader>sh', require('fzf-lua').help_tags, { desc = '[S]earch [H]elp' })
+vim.keymap.set('n', '<leader>she', require('fzf-lua').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('fzf-lua').grep_cword, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('fzf-lua').diagnostics_document, { desc = '[S]earch [D]iagnostics' })
@@ -471,9 +467,12 @@ end, { desc = '[S]earch [S]election' })
 vim.keymap.set('n', '<leader>sb', require('fzf-lua').builtin, { desc = '[S]earch [B]uiltin' })
 vim.keymap.set('n', '<leader>tr', require('fzf-lua').resume, { desc = '[T]elescope [R]esume' })
 
--- [[ Configure Treesitter ]]
--- See `:help nvim-treesitter`
--- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
+-- [[ package-info ]]
+vim.keymap.set('n', '<leader>ns', require('package-info').show, { desc = 'Show npm package info' })
+vim.keymap.set('n', '<leader>nt', require('package-info').toggle, { desc = 'Toggle npm package info' })
+vim.keymap.set('n', '<leader>nu', require('package-info').update, { desc = 'Update npm package' })
+vim.keymap.set('n', '<leader>nc', require('package-info').change_version, { desc = 'Change npm package' })
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
@@ -544,17 +543,28 @@ vim.defer_fn(function()
   }
 end, 0)
 
--- [[ Configure LSP ]]
-local on_attach = function(_, bufnr)
-  local nmap = function(keys, func, desc)
+local get_nmap = function(bufnr)
+  return function(keys, func, desc)
     if desc then
       desc = 'LSP: ' .. desc
     end
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
+end
 
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local nmap = get_nmap(args.buf)
+    nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+    -- See `:help K` for why this keymap
+    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+    nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  end,
+})
+-- [[ Configure LSP ]]
+local on_attach = function(_, bufnr)
+  local nmap = get_nmap(bufnr)
   nmap('<leader>ca', require('fzf-lua').lsp_code_actions, '[C]ode [A]ction')
 
   nmap('gd', function()
@@ -568,17 +578,8 @@ local on_attach = function(_, bufnr)
   nmap('<leader>ds', require('fzf-lua').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('fzf-lua').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
-  -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
   -- Lesser used LSP functionality
   nmap('gD', require('fzf-lua').lsp_implementations, '[G]oto [D]eclaration')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
 
   -- Create a command `:Format` local to the LSP buffer
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
@@ -609,6 +610,7 @@ require('which-key').register({
 require('mason').setup()
 require('mason-lspconfig').setup()
 
+
 -- Enable the following language servers
 local servers = {
   eslint = {},
@@ -617,6 +619,7 @@ local servers = {
   cssls = {},
   jsonls = {},
   solargraph = {},
+  graphql = { filetypes = { 'graphql' } },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
