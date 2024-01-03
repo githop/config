@@ -59,7 +59,3 @@ zinit lucid from"gh-r" as"command" for \
 for FILE in ~/.config/zsh/scripts/*; do
     source $FILE
 done
-
-# fnm
-export PATH="/Users/githop/Library/Application Support/fnm:$PATH"
-eval "`fnm env`"
