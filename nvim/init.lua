@@ -74,7 +74,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim',  opts = {} },
+  { 'folke/which-key.nvim', opts = {} },
 
   {
     -- Adds git releated signs to the gutter, as well as utilities for managing changes
@@ -147,8 +147,8 @@ require('lazy').setup({
     'rebelot/kanagawa.nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'kanagawa'
       require('kanagawa').setup {}
+      vim.cmd.colorscheme 'kanagawa-dragon'
     end,
   },
 
@@ -187,7 +187,7 @@ require('lazy').setup({
       require('fzf-lua').setup {
         winopts = {
           height = 0.9,
-          width = 0.9
+          width = 0.9,
         },
         previewers = {
           git_diff = {
@@ -274,20 +274,15 @@ require('lazy').setup({
       local lint = require 'lint'
 
       lint.linters_by_ft = {
-        javascript = { 'eslint_d' },
-        typescript = { 'eslint_d' },
-        javascriptreact = { 'eslint_d' },
-        typescriptreact = { 'eslint_d' },
+        javascript = { 'eslint' },
+        typescript = { 'eslint' },
+        javascriptreact = { 'eslint' },
+        typescriptreact = { 'eslint' },
         scss = { 'stylelint' },
-        ruby = { 'rubocop' },
       }
-
-      local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
-
-      vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
-        group = lint_augroup,
+      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
         callback = function()
-          lint.try_lint()
+          require('lint').try_lint()
         end,
       })
     end,
@@ -327,11 +322,11 @@ require('lazy').setup({
   {
     'vuki656/package-info.nvim',
     dependencies = {
-      'MunifTanjim/nui.nvim'
+      'MunifTanjim/nui.nvim',
     },
     config = function()
       require('package-info').setup {}
-    end
+    end,
   },
 
   require 'kickstart.plugins.autoformat',
@@ -597,7 +592,6 @@ require('which-key').register({
 require('mason').setup()
 require('mason-lspconfig').setup()
 
-
 -- Enable the following language servers
 local servers = {
   eslint = {},
@@ -605,7 +599,7 @@ local servers = {
   html = { filetypes = { 'html', 'hbs' } },
   cssls = {},
   jsonls = {},
-  solargraph = {},
+  yamlls = {},
   graphql = { filetypes = { 'graphql' } },
   lua_ls = {
     Lua = {
