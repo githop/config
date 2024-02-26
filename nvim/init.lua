@@ -214,29 +214,11 @@ require('lazy').setup({
   },
 
   {
-    'nvim-neo-tree/neo-tree.nvim',
-    version = '*',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-      'MunifTanjim/nui.nvim',
-    },
+    'stevearc/oil.nvim',
+    opts = {},
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
-      require('neo-tree').setup {
-        follow_current_file = {
-          enabled = true,
-        },
-        window = {
-          position = 'float',
-        },
-        filesystem = {
-          filtered_items = {
-            hide_dotfiles = false,
-            hide_gitignored = false,
-            hide_hidden = false,
-          },
-        },
-      }
+      require('oil').setup {}
     end,
   },
 
@@ -433,7 +415,7 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
-vim.keymap.set('n', '<leader>e', ':Neotree toggle current float reveal_force_cwd<cr>', { desc = 'Toggle Neotree' })
+vim.keymap.set('n', '<leader>e', '<CMD>Oil<Cr>', { desc = 'Open parent dir' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
