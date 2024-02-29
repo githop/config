@@ -274,10 +274,10 @@ require('lazy').setup({
       local lint = require 'lint'
 
       lint.linters_by_ft = {
-        javascript = { 'eslint' },
-        typescript = { 'eslint' },
-        javascriptreact = { 'eslint' },
-        typescriptreact = { 'eslint' },
+        javascript = { 'biome' },
+        typescript = { 'biome' },
+        javascriptreact = { 'biome' },
+        typescriptreact = { 'biome' },
         scss = { 'stylelint' },
       }
       vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
@@ -297,13 +297,13 @@ require('lazy').setup({
 
       conform.setup {
         formatters_by_ft = {
-          javascript = { 'prettier' },
-          typescript = { 'prettier' },
-          javascriptreact = { 'prettier' },
-          typescriptreact = { 'prettier' },
+          javascript = { 'biome' },
+          typescript = { 'biome' },
+          javascriptreact = { 'biome' },
+          typescriptreact = { 'biome' },
           css = { 'prettier' },
           html = { 'prettier' },
-          json = { 'prettier' },
+          json = { 'biome' },
           yaml = { 'prettier' },
           markdown = { 'prettier' },
           graphql = { 'prettier' },
@@ -594,12 +594,12 @@ require('mason-lspconfig').setup()
 
 -- Enable the following language servers
 local servers = {
-  eslint = {},
   tsserver = {},
   html = { filetypes = { 'html', 'hbs' } },
   cssls = {},
   jsonls = {},
   yamlls = {},
+  biome = {},
   graphql = { filetypes = { 'graphql' } },
   lua_ls = {
     Lua = {
