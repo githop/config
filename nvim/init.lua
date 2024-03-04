@@ -69,7 +69,7 @@ require('lazy').setup({
           map('gI', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')
           map('<leader>D', require('fzf-lua').lsp_typedefs, 'Type [D]efinition')
           map('<leader>ds', require('fzf-lua').lsp_document_symbols, '[D]ocument [S]ymbols')
-          map('<leader>ws', require('fzf-lua').lsp_workspace_symbols, '[W]orkspace [S]ymbols')
+          map('<leader>ws', require('fzf-lua').lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.server_capabilities.documentHighlightProvider then
@@ -95,7 +95,6 @@ require('lazy').setup({
         cssls = {},
         jsonls = {},
         yamlls = {},
-        biome = {},
         graphql = { filetypes = { 'graphql' } },
         lua_ls = {
           -- cmd = {...},
@@ -346,10 +345,11 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       -- calling `setup` is optional for customization
+      require('fzf-lua').setup { 'fzf-native' }
       require('fzf-lua').setup {
         winopts = {
           height = 0.9,
-          width = 0.9
+          width = 0.9,
         },
         previewers = {
           git_diff = {
@@ -386,6 +386,7 @@ require('lazy').setup({
 
   {
     'akinsho/bufferline.nvim',
+    event = 'VeryLazy',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
@@ -489,11 +490,11 @@ require('lazy').setup({
   {
     'vuki656/package-info.nvim',
     dependencies = {
-      'MunifTanjim/nui.nvim'
+      'MunifTanjim/nui.nvim',
     },
     config = function()
       require('package-info').setup {}
-    end
+    end,
   },
 
   {
@@ -625,6 +626,9 @@ vim.keymap.set('v', '<leader>sv', function()
 end, { desc = '[S]earch [S]election' })
 vim.keymap.set('n', '<leader>sb', require('fzf-lua').builtin, { desc = '[S]earch [B]uiltin' })
 vim.keymap.set('n', '<leader>tr', require('fzf-lua').resume, { desc = '[T]elescope [R]esume' })
+vim.keymap.set('n', '<leader>sn', function()
+  require('fzf-lua').live_grep { cwd = vim.fn.stdpath 'config' }
+end, { desc = '[S]earch [N]eovim' })
 
 -- [[ package-info ]]
 vim.keymap.set('n', '<leader>ns', require('package-info').show, { desc = 'Show npm package info' })
