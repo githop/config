@@ -10,7 +10,7 @@
 !zsh/**
 
 zsh/.zsh_history
-zsh/.zcompdump
+zsh/.zcomp*
 
 
 kitty/current-theme.conf
