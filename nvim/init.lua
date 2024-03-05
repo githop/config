@@ -59,6 +59,10 @@ require('lazy').setup({
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          -- See `:help K` for why this keymap
+          map('K', vim.lsp.buf.hover, 'Hover Documentation')
+          map('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
           map('<leader>ca', require('fzf-lua').lsp_code_actions, '[C]ode [A]ction')
           map('gd', function()
             require('fzf-lua').lsp_definitions {
@@ -69,7 +73,7 @@ require('lazy').setup({
           map('gI', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')
           map('<leader>D', require('fzf-lua').lsp_typedefs, 'Type [D]efinition')
           map('<leader>ds', require('fzf-lua').lsp_document_symbols, '[D]ocument [S]ymbols')
-          map('<leader>ws', require('fzf-lua').lsp_workspace_symbols, '[W]orkspace [S]ymbols')
+          map('<leader>ws', require('fzf-lua').lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           if client and client.server_capabilities.documentHighlightProvider then
@@ -89,8 +93,12 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
+      local util = require 'lspconfig.util'
+
       local servers = {
-        tsserver = {},
+        tsserver = {
+          root_dir = util.root_pattern('.git', 'tsconfig.json', 'package.json'),
+        },
         html = { filetypes = { 'html', 'hbs' } },
         cssls = {},
         jsonls = {},
@@ -346,6 +354,7 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       -- calling `setup` is optional for customization
+      require('fzf-lua').setup { 'fzf-native' }
       require('fzf-lua').setup {
         winopts = {
           height = 0.9,
@@ -386,6 +395,7 @@ require('lazy').setup({
 
   {
     'akinsho/bufferline.nvim',
+    event = 'VeryLazy',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
     config = function()
@@ -506,6 +516,16 @@ require('lazy').setup({
       require('copilot_cmp').setup()
     end,
   },
+
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
+    config = function()
+      require('typescript-tools').setup {}
+    end,
+  },
+
   -- require 'kickstart.plugins.debug',
 }, {})
 --
@@ -620,6 +640,9 @@ vim.keymap.set('v', '<leader>sv', function()
 end, { desc = '[S]earch [S]election' })
 vim.keymap.set('n', '<leader>sb', require('fzf-lua').builtin, { desc = '[S]earch [B]uiltin' })
 vim.keymap.set('n', '<leader>tr', require('fzf-lua').resume, { desc = '[T]elescope [R]esume' })
+vim.keymap.set('n', '<leader>sn', function()
+  require('fzf-lua').live_grep { cwd = vim.fn.stdpath 'config' }
+end, { desc = '[S]earch [N]eovim' })
 
 -- [[ package-info ]]
 vim.keymap.set('n', '<leader>ns', require('package-info').show, { desc = 'Show npm package info' })
