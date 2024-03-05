@@ -58,7 +58,10 @@ require('lazy').setup({
           local map = function(keys, func, desc)
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
-
+          map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          -- See `:help K` for why this keymap
+          map('K', vim.lsp.buf.hover, 'Hover Documentation')
+          map('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
           map('<leader>ca', require('fzf-lua').lsp_code_actions, '[C]ode [A]ction')
           map('gd', function()
             require('fzf-lua').lsp_definitions {
@@ -512,6 +515,16 @@ require('lazy').setup({
       require('copilot_cmp').setup()
     end,
   },
+
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
+    config = function()
+      require('typescript-tools').setup {}
+    end,
+  },
+
   -- require 'kickstart.plugins.debug',
 }, {})
 --
