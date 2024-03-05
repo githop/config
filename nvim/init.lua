@@ -58,6 +58,7 @@ require('lazy').setup({
           local map = function(keys, func, desc)
             vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
+
           map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
           -- See `:help K` for why this keymap
           map('K', vim.lsp.buf.hover, 'Hover Documentation')
@@ -93,7 +94,6 @@ require('lazy').setup({
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       local servers = {
-        tsserver = {},
         html = { filetypes = { 'html', 'hbs' } },
         cssls = {},
         jsonls = {},
@@ -146,6 +146,13 @@ require('lazy').setup({
           end,
         },
       }
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = 'rounded',
+      })
+
+      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = 'rounded',
+      })
     end,
   },
 
@@ -179,6 +186,10 @@ require('lazy').setup({
         },
         completion = {
           completeopt = 'menu,menuone,noinsert',
+        },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
         },
         mapping = cmp.mapping.preset.insert {
           ['<C-j>'] = cmp.mapping.select_next_item(),
@@ -317,17 +328,37 @@ require('lazy').setup({
   },
 
   {
-    -- Set lualine as statusline
-    'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
-    opts = {
-      options = {
-        icons_enabled = false,
-        theme = 'auto',
-        component_separators = '|',
-        section_separators = '',
-      },
-    },
+    'echasnovski/mini.nvim',
+    config = function()
+      -- Better Around/Inside textobjects
+      --
+      -- Examples:
+      --  - va)  - [V]isually select [A]round [)]paren
+      --  - yinq - [Y]ank [I]nside [N]ext [']quote
+      --  - ci'  - [C]hange [I]nside [']quote
+      require('mini.ai').setup { n_lines = 500 }
+
+      -- Add/delete/replace surroundings (brackets, quotes, etc.)
+      --
+      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+      -- - sd'   - [S]urround [D]elete [']quotes
+      -- - sr)'  - [S]urround [R]eplace [)] [']
+      require('mini.surround').setup()
+
+      -- Simple and easy statusline.
+      --  You could remove this setup call if you don't like it,
+      --  and try some other statusline plugin
+      local statusline = require 'mini.statusline'
+      statusline.setup()
+
+      -- You can configure sections in the statusline by overriding their
+      -- default behavior. For example, here we set the section for
+      -- cursor location to LINE:COLUMN
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_location = function()
+        return '%2l:%-2v'
+      end
+    end,
   },
 
   {
@@ -415,17 +446,6 @@ require('lazy').setup({
   },
 
   {
-    'kylechui/nvim-surround',
-    version = '*', -- Use for stability; omit to use `main` branch for the latest features
-    event = 'VeryLazy',
-    config = function()
-      require('nvim-surround').setup {
-        -- Configuration here, or leave empty to use defaults
-      }
-    end,
-  },
-
-  {
     'sindrets/diffview.nvim',
     config = function()
       require('diffview').setup {}
@@ -447,13 +467,9 @@ require('lazy').setup({
         scss = { 'stylelint' },
         ruby = { 'rubocop' },
       }
-
-      local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
-
-      vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
-        group = lint_augroup,
+      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
         callback = function()
-          lint.try_lint()
+          require('lint').try_lint()
         end,
       })
     end,
