@@ -555,6 +555,14 @@ require('lazy').setup({
     end,
   },
 
+  {
+    'ruifm/gitlinker.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('gitlinker').setup {}
+    end,
+  },
+
   -- require 'kickstart.plugins.debug',
 }, {})
 --
