@@ -348,20 +348,14 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+    end,
+  },
 
-      -- Simple and easy statusline.
-      --  You could remove this setup call if you don't like it,
-      --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      statusline.setup()
-
-      -- You can configure sections in the statusline by overriding their
-      -- default behavior. For example, here we set the section for
-      -- cursor location to LINE:COLUMN
-      ---@diagnostic disable-next-line: duplicate-set-field
-      statusline.section_location = function()
-        return '%2l:%-2v'
-      end
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup {}
     end,
   },
 
@@ -418,21 +412,21 @@ require('lazy').setup({
     opts = {},
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
-      require('oil').setup {}
+      require('oil').setup {
+        win_options = {
+          signcolumn = 'yes:1',
+        },
+      }
     end,
   },
 
   {
-    'akinsho/bufferline.nvim',
-    event = 'VeryLazy',
-    version = '*',
-    dependencies = 'nvim-tree/nvim-web-devicons',
+    'refractalize/oil-git-status.nvim',
+    dependencies = {
+      'stevearc/oil.nvim',
+    },
     config = function()
-      require('bufferline').setup {
-        options = {
-          diagnostics = 'nvim_lsp',
-        },
-      }
+      require('oil-git-status').setup {}
     end,
   },
 
@@ -446,13 +440,6 @@ require('lazy').setup({
       local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
       local cmp = require 'cmp'
       cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
-    end,
-  },
-
-  {
-    'sindrets/diffview.nvim',
-    config = function()
-      require('diffview').setup {}
     end,
   },
 
