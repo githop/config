@@ -30,8 +30,6 @@ require('lazy').setup({
 
   -- Git related plugins
   'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
-
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
 
@@ -85,6 +83,18 @@ require('lazy').setup({
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
               buffer = event.buf,
               callback = vim.lsp.buf.clear_references,
+            })
+          end
+
+          if client and client.server_capabilities.signatureHelpProvider then
+            vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+              border = 'rounded',
+            })
+          end
+
+          if client and client.server_capabilities.hoverProvider then
+            vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+              border = 'rounded',
             })
           end
         end,
@@ -147,13 +157,6 @@ require('lazy').setup({
           end,
         },
       }
-      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-        border = 'rounded',
-      })
-
-      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = 'rounded',
-      })
     end,
   },
 
@@ -541,6 +544,14 @@ require('lazy').setup({
       require('typescript-tools').setup {
         root_dir = util.root_pattern('.git', 'tsconfig.json', 'package.json'),
       }
+    end,
+  },
+
+  {
+    'ruifm/gitlinker.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      require('gitlinker').setup {}
     end,
   },
 
