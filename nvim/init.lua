@@ -543,14 +543,6 @@ require('lazy').setup({
   },
 
   {
-    'ruifm/gitlinker.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      require('gitlinker').setup {}
-    end,
-  },
-
-  {
     'goolord/alpha-nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
