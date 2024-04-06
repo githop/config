@@ -325,8 +325,7 @@ require('lazy').setup({
     'rebelot/kanagawa.nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'kanagawa'
-      require('kanagawa').setup {}
+      require('kanagawa').load 'dragon'
     end,
   },
 
@@ -511,7 +510,10 @@ require('lazy').setup({
     cmd = 'Copilot',
     event = 'InsertEnter',
     config = function()
-      require('copilot').setup {}
+      require('copilot').setup {
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      }
     end,
   },
 
