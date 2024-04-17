@@ -107,6 +107,7 @@ require('lazy').setup({
         html = { filetypes = { 'html', 'hbs' } },
         cssls = {},
         jsonls = {},
+        pylsp = {},
         yamlls = {},
         graphql = { filetypes = { 'graphql' } },
         lua_ls = {
@@ -224,7 +225,6 @@ require('lazy').setup({
           end, { 'i', 's' }),
         },
         sources = {
-          { name = 'copilot' },
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'buffer' },
@@ -511,16 +511,12 @@ require('lazy').setup({
     event = 'InsertEnter',
     config = function()
       require('copilot').setup {
-        suggestion = { enabled = false },
-        panel = { enabled = false },
+        suggestion = {
+          keymap = {
+            accept = '<C-l>',
+          },
+        },
       }
-    end,
-  },
-
-  {
-    'zbirenbaum/copilot-cmp',
-    config = function()
-      require('copilot_cmp').setup()
     end,
   },
 
