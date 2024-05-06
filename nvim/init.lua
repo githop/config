@@ -107,7 +107,7 @@ require('lazy').setup({
         html = { filetypes = { 'html', 'hbs' } },
         cssls = {},
         jsonls = {},
-        pylsp = {},
+        pyright = {},
         yamlls = {
           settings = {
             yaml = {
