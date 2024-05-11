@@ -8,6 +8,8 @@
 !nvim/**
 !kitty/**
 !zsh/**
+!bat/**
+!wezterm/**
 
 zsh/.zsh_history
 zsh/.zcomp*
