@@ -22,6 +22,7 @@ zinit lucid for \
         OMZL::git.zsh \
   atload"unalias grv" \
         OMZP::git \
+        OMZP::aws \
         https://github.com/junegunn/fzf/raw/master/shell/{'completion','key-bindings'}.zsh \
         https://github.com/junegunn/fzf-git.sh/blob/main/fzf-git.sh \
   as"program" \
@@ -30,6 +31,8 @@ zinit lucid for \
 
 # zsh syntax highlighting, suggestions, completions
 zinit wait lucid for \
+  atinit"zicompinit" \
+    Aloxaf/fzf-tab \
   atinit"zicompinit; zicdreplay" \
       zdharma-continuum/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
