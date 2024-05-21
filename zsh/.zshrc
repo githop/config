@@ -19,10 +19,10 @@ setopt promptsubst
 
 # Oh my zshell git plugin
 zinit lucid for \
+        OMZP::aws \
         OMZL::git.zsh \
   atload"unalias grv" \
         OMZP::git \
-        OMZP::aws \
         https://github.com/junegunn/fzf/raw/master/shell/{'completion','key-bindings'}.zsh \
         https://github.com/junegunn/fzf-git.sh/blob/main/fzf-git.sh \
   as"program" \
