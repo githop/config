@@ -8,10 +8,11 @@
 !nvim/**
 !kitty/**
 !zsh/**
+!bat/**
+!wezterm/**
 
 zsh/.zsh_history
 zsh/.zcomp*
-zsh/
 
 
 kitty/current-theme.conf
