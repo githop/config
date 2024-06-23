@@ -58,11 +58,11 @@ zinit lucid from"gh-r" as"command" for \
     mv'fd* -> fd' pick'fd/fd' \
         @sharkdp/fd
 
-# configure rbenv 
-    eval "$(rbenv init - zsh)"
-
 # load custom scripts
 for FILE in ~/.config/zsh/scripts/*; do
     source $FILE
 done
 
+
+# Created by `pipx` on 2024-06-23 02:06:05
+export PATH="$PATH:/home/githop/.local/bin"

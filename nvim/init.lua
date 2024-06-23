@@ -104,8 +104,6 @@ require('lazy').setup({
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       local servers = {
-        html = { filetypes = { 'html', 'hbs' } },
-        cssls = {},
         jsonls = {},
         pyright = {},
         yamlls = {
@@ -138,7 +136,6 @@ require('lazy').setup({
             },
           },
         },
-        graphql = { filetypes = { 'graphql' } },
         lua_ls = {
           -- cmd = {...},
           -- filetypes { ...},
@@ -554,12 +551,12 @@ require('lazy').setup({
       local dashboard = require 'alpha.themes.dashboard'
 
       local header = [[
- ██████╗ ██╗████████╗██╗  ██╗ ██████╗ ██████╗ 
+ ██████╗ ██╗████████╗██╗  ██╗ ██████╗ ██████╗
 ██╔════╝ ██║╚══██╔══╝██║  ██║██╔═══██╗██╔══██╗
 ██║  ███╗██║   ██║   ███████║██║   ██║██████╔╝
-██║   ██║██║   ██║   ██╔══██║██║   ██║██╔═══╝ 
-╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██║     
- ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     
+██║   ██║██║   ██║   ██╔══██║██║   ██║██╔═══╝
+╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██║
+ ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝
       ]]
       dashboard.section.header.val = vim.split(header, '\n')
       dashboard.section.buttons.val = {
@@ -761,7 +758,7 @@ vim.keymap.set('n', '<leader>nc', require('package-info').change_version, { desc
 vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
-    ensure_installed = { 'lua', 'python', 'ruby', 'tsx', 'typescript', 'graphql', 'json', 'javascript', 'vimdoc', 'vim', 'html', 'css', 'bash' },
+    ensure_installed = { 'lua', 'python', 'tsx', 'typescript', 'json', 'javascript', 'vimdoc', 'vim', 'bash' },
 
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
