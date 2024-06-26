@@ -66,3 +66,10 @@ done
 
 # Created by `pipx` on 2024-06-23 02:06:05
 export PATH="$PATH:/home/githop/.local/bin"
+
+# fnm
+FNM_PATH="/home/githop/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="/home/githop/.local/share/fnm:$PATH"
+  eval "`fnm env`"
+fi
