@@ -18,4 +18,6 @@ config.window_padding = {
 	bottom = 0,
 }
 
+config.enable_scroll_bar = true
+
 return config
