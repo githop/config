@@ -202,31 +202,11 @@ require('lazy').setup({
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete {},
-          ['<CR>'] = cmp.mapping.confirm {
-            behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-          },
-          ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
+          ['<CR>'] = cmp.mapping.confirm { select = true },
+          ['<Tab>'] = cmp.mapping.select_next_item(),
+          ['<S-Tab>'] = cmp.mapping.select_prev_item(),
         },
         sources = {
-          { name = 'copilot' },
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'buffer' },
@@ -327,8 +307,7 @@ require('lazy').setup({
     'rebelot/kanagawa.nvim',
     priority = 1000,
     config = function()
-      require('kanagawa').setup {}
-      vim.cmd.colorscheme 'kanagawa-dragon'
+      require('kanagawa').load 'dragon'
     end,
   },
 
@@ -368,8 +347,6 @@ require('lazy').setup({
     main = 'ibl',
     opts = {},
   },
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -512,14 +489,13 @@ require('lazy').setup({
     cmd = 'Copilot',
     event = 'InsertEnter',
     config = function()
-      require('copilot').setup {}
-    end,
-  },
-
-  {
-    'zbirenbaum/copilot-cmp',
-    config = function()
-      require('copilot_cmp').setup()
+      require('copilot').setup {
+        suggestion = {
+          keymap = {
+            accept = '<C-l>',
+          },
+        },
+      }
     end,
   },
 
@@ -690,7 +666,7 @@ vim.keymap.set('n', '<leader>sg', require('fzf-lua').live_grep, { desc = '[S]ear
 vim.keymap.set('n', '<leader>sd', require('fzf-lua').diagnostics_document, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('v', '<leader>sv', function()
   require('fzf-lua').grep_visual { rg_opts = '--multiline' }
-end, { desc = '[S]earch [S]election' })
+end, { desc = '[S]earch [V]isual' })
 vim.keymap.set('n', '<leader>sb', require('fzf-lua').builtin, { desc = '[S]earch [B]uiltin' })
 vim.keymap.set('n', '<leader>tr', require('fzf-lua').resume, { desc = '[T]elescope [R]esume' })
 vim.keymap.set('n', '<leader>sn', function()
