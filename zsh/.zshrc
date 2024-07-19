@@ -61,6 +61,7 @@ zinit lucid from"gh-r" as"command" for \
 # configure rbenv 
     eval "$(rbenv init - zsh)"
 
+export XDG_CONFIG_HOME="$HOME/.config"
 # load custom scripts
 for FILE in ~/.config/zsh/scripts/*; do
     source $FILE
