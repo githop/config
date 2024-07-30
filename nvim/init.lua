@@ -102,11 +102,24 @@ require('lazy').setup({
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      local lspconfig = require 'lspconfig'
 
       local servers = {
         html = { filetypes = { 'html', 'hbs' } },
         cssls = {},
         jsonls = {},
+        eslint = {
+          on_attach = function(_, bufnr)
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              buffer = bufnr,
+              command = 'EslintFixAll',
+            })
+          end,
+          settings = {
+            workingDirectory = { mode = 'location' },
+          },
+          root_dir = lspconfig.util.find_git_ancestor,
+        },
         pyright = {},
         yamlls = {
           settings = {
@@ -465,10 +478,6 @@ require('lazy').setup({
       local lint = require 'lint'
 
       lint.linters_by_ft = {
-        javascript = { 'eslint_d' },
-        typescript = { 'eslint_d' },
-        javascriptreact = { 'eslint_d' },
-        typescriptreact = { 'eslint_d' },
         scss = { 'stylelint' },
         ruby = { 'rubocop' },
       }
