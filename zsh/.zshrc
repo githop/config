@@ -17,6 +17,10 @@ zinit load starship/starship
 
 setopt promptsubst
 
+zinit for \
+    atinit'zstyle ":omz:plugins:eza" icons yes' \
+    OMZP::eza
+
 # Oh my zshell git plugin
 zinit lucid for \
         OMZP::aws \
