@@ -777,7 +777,8 @@ vim.keymap.set('v', '<leader>sv', function()
   require('fzf-lua').grep_visual { rg_opts = '--multiline' }
 end, { desc = '[S]earch [V]isual' })
 vim.keymap.set('n', '<leader>sb', require('fzf-lua').builtin, { desc = '[S]earch [B]uiltin' })
-vim.keymap.set('n', '<leader>tr', require('fzf-lua').resume, { desc = '[T]elescope [R]esume' })
+vim.keymap.set('n', '<leader>tr', require('fzf-lua').resume, { desc = '[R]esume' })
+vim.keymap.set('n', '<leader>to', require('fzf-lua').oldfiles, { desc = '[O]ldfiles' })
 vim.keymap.set('n', '<leader>sn', function()
   require('fzf-lua').live_grep { cwd = vim.fn.stdpath 'config' }
 end, { desc = '[S]earch [N]eovim' })

@@ -13,6 +13,7 @@
 
 zsh/.zsh_history
 zsh/.zcomp*
+zsh/.zsh_sessions
 
 
 kitty/current-theme.conf
