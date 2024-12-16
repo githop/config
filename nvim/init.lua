@@ -74,28 +74,33 @@ require('lazy').setup({
           map('<leader>ws', require('fzf-lua').lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.documentHighlightProvider then
+          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+            local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
+              group = highlight_augroup,
               callback = vim.lsp.buf.document_highlight,
             })
 
             vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
               buffer = event.buf,
+              group = highlight_augroup,
               callback = vim.lsp.buf.clear_references,
             })
-          end
 
-          if client and client.server_capabilities.signatureHelpProvider then
-            vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-              border = 'rounded',
+            vim.api.nvim_create_autocmd('LspDetach', {
+              group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+              callback = function(event2)
+                vim.lsp.buf.clear_references()
+                vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+              end,
             })
           end
 
-          if client and client.server_capabilities.hoverProvider then
-            vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-              border = 'rounded',
-            })
+          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+            map('<leader>th', function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+            end, '[T]oggle Inlay [H]ints')
           end
         end,
       })
@@ -262,20 +267,21 @@ require('lazy').setup({
   {
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
-
-      -- Document existing key chains
-      require('which-key').add {
-        { '<leader>c', group = '[C]ode' },
-        { '<leader>d', group = '[D]ocument' },
-        { '<leader>r', group = '[R]ename' },
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      }
-    end,
+    opts = {
+      icons = {
+        mappings = vim.g.have_nerd_font,
+        keys = vim.g.have_nerd_font,
+      },
+    },
+    spec = {
+      { '<leader>c', group = '[C]ode' },
+      { '<leader>d', group = '[D]ocument' },
+      { '<leader>r', group = '[R]ename' },
+      { '<leader>s', group = '[S]earch' },
+      { '<leader>w', group = '[W]orkspace' },
+      { '<leader>t', group = '[T]oggle' },
+      { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+    },
   },
 
   {
@@ -661,7 +667,7 @@ require('lazy').setup({
   },
   -- require 'kickstart.plugins.debug',
 }, {})
---
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
@@ -788,6 +794,24 @@ vim.keymap.set('n', '<leader>ns', require('package-info').show, { desc = 'Show n
 vim.keymap.set('n', '<leader>nt', require('package-info').toggle, { desc = 'Toggle npm package info' })
 vim.keymap.set('n', '<leader>nu', require('package-info').update, { desc = 'Update npm package' })
 vim.keymap.set('n', '<leader>nc', require('package-info').change_version, { desc = 'Change npm package' })
+
+-- [[ detect .env files ]]
+vim.filetype.add {
+  -- Detect and assign filetype based on the extension of the filename
+  extension = {
+    env = 'sh',
+  },
+  -- Detect and apply filetypes based on the entire filename
+  filename = {
+    ['.env'] = 'sh',
+    ['env'] = 'sh',
+  },
+  -- Detect and apply filetypes based on certain patterns of the filenames
+  pattern = {
+    -- INFO: Match filenames like - ".env.example", ".env.local" and so on
+    ['%.env%.[%w_.-]+'] = 'sh',
+  },
+}
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
