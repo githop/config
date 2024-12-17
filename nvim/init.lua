@@ -61,7 +61,7 @@ vim.o.timeoutlen = 300
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = '» ', nbsp = '␣' }
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
@@ -399,13 +399,8 @@ require('lazy').setup({
   -- Useful plugin to show you pending keybinds.
   {
     'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    opts = {
-      icons = {
-        mappings = vim.g.have_nerd_font,
-        keys = vim.g.have_nerd_font,
-      },
-    },
+    event = 'VeryLazy', -- Sets the loading event to 'VimEnter'
+    opts = {},
     spec = {
       { '<leader>c', group = '[C]ode' },
       { '<leader>d', group = '[D]ocument' },
@@ -516,7 +511,9 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
-      require('lualine').setup {}
+      require('lualine').setup {
+        options = { theme = 'kanagawa' },
+      }
     end,
   },
 
@@ -782,7 +779,7 @@ require('lazy').setup({
       },
       {
         '<leader>cl',
-        '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+        '<cmd>Trouble lsp toggle focus=false win.type=float<cr>',
         desc = 'LSP Definitions / references / ... (Trouble)',
       },
       {
@@ -827,11 +824,6 @@ require('lazy').setup({
         pretty_errors = true,
       }
     end,
-  },
-
-  {
-    'stevearc/dressing.nvim',
-    opts = {},
   },
   -- require 'kickstart.plugins.debug',
 }, {})
