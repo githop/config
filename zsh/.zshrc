@@ -23,6 +23,7 @@ zinit for \
 
 # Oh my zshell git plugin
 zinit lucid for \
+        OMZP::aws \
         OMZL::git.zsh \
   atload"unalias grv" \
         OMZP::git \
@@ -34,6 +35,8 @@ zinit lucid for \
 
 # zsh syntax highlighting, suggestions, completions
 zinit wait lucid for \
+  atinit"zicompinit" \
+    Aloxaf/fzf-tab \
   atinit"zicompinit; zicdreplay" \
       zdharma-continuum/fast-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
@@ -59,6 +62,7 @@ zinit lucid from"gh-r" as"command" for \
     mv'fd* -> fd' pick'fd/fd' \
         @sharkdp/fd
 
+export XDG_CONFIG_HOME="$HOME/.config"
 # load custom scripts
 for FILE in ~/.config/zsh/scripts/*; do
     source $FILE
