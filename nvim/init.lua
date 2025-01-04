@@ -752,6 +752,19 @@ vim.keymap.set('n', '<leader>nt', require('package-info').toggle, { desc = 'Togg
 vim.keymap.set('n', '<leader>nu', require('package-info').update, { desc = 'Update npm package' })
 vim.keymap.set('n', '<leader>nc', require('package-info').change_version, { desc = 'Change npm package' })
 
+-- [[linux clipoard ssh]]
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy '+',
+    ['*'] = require('vim.ui.clipboard.osc52').copy '*',
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste '+',
+    ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+  },
+}
+
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 -- Defer Treesitter setup after first render to improve startup time of 'nvim {filename}'
