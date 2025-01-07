@@ -10,6 +10,7 @@
 !zsh/**
 !bat/**
 !wezterm/**
+!ghostty/**
 
 zsh/.zsh_history
 zsh/.zcomp*
