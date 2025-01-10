@@ -5,3 +5,4 @@ font-thicken = true
 theme = Kanagawa Dragon
 macos-titlebar-style = transparent
 window-colorspace = display-p3
+clipboard-read = allow
