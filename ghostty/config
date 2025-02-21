@@ -6,3 +6,4 @@ theme = kanagawa-dragon
 macos-titlebar-style = transparent
 window-colorspace = display-p3
 clipboard-read = allow
+clipboard-write = allow
