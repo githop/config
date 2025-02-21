@@ -182,7 +182,7 @@ require('lazy').setup({
           map('<leader>ca', require('fzf-lua').lsp_code_actions, '[C]ode [A]ction')
           map('gd', function()
             require('fzf-lua').lsp_definitions {
-              jump_to_single_result = true,
+              jump1 = true,
             }
           end, '[G]oto [D]efinition')
           map('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
