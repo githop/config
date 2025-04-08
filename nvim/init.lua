@@ -122,6 +122,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- [[linux clipboard ssh]]
+local function paste()
+  return {
+    vim.fn.split(vim.fn.getreg '', '\n'),
+    vim.fn.getregtype '',
+  }
+end
+
 vim.g.clipboard = {
   name = 'OSC 52',
   copy = {
@@ -129,8 +136,8 @@ vim.g.clipboard = {
     ['*'] = require('vim.ui.clipboard.osc52').copy '*',
   },
   paste = {
-    ['+'] = require('vim.ui.clipboard.osc52').paste '+',
-    ['*'] = require('vim.ui.clipboard.osc52').paste '*',
+    ['+'] = paste,
+    ['*'] = paste,
   },
 }
 
@@ -195,7 +202,7 @@ require('lazy').setup({
           map('<leader>ca', require('fzf-lua').lsp_code_actions, '[C]ode [A]ction')
           map('gd', function()
             require('fzf-lua').lsp_definitions {
-              jump_to_single_result = true,
+              jump1 = true,
             }
           end, '[G]oto [D]efinition')
           map('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
@@ -245,6 +252,7 @@ require('lazy').setup({
           end
 
           vim.diagnostic.config {
+            virtual_text = true,
             float = {
               border = 'rounded',
             },
@@ -501,7 +509,22 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require('lualine').setup {
-        options = { theme = 'kanagawa' },
+        options = {
+          theme = 'kanagawa',
+          globalstatus = true,
+        },
+        sections = {
+          lualine_c = {
+            { 'filename', path = 4 },
+          },
+          lualine_x = { 'filetype' },
+          lualine_y = {},
+        },
+        inactive_sections = {
+          lualine_c = {
+            { 'filename', path = 4 },
+          },
+        },
       }
     end,
   },
