@@ -1,37 +1,36 @@
+# Zinit setup using XDG Base Directory Specification
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
 
-### Added by Zinit's installer
-if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
-    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
-    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
-        print -P "%F{33} %F{34}Installation successful.%f%b" || \
-        print -P "%F{160} The clone has failed.%f%b"
-fi
-
-source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+# Starship Prompt
 zinit ice from"gh-r" as"command" atload'eval "$(starship init zsh)"'
 zinit load starship/starship
 
 setopt promptsubst
 
+# EZA (ls replacement) with OMZ integration
 zinit for \
     atinit'zstyle ":omz:plugins:eza" icons yes' \
     OMZP::eza
 
-# Oh my zshell git plugin
+# Oh my zshell plugins
 zinit lucid for \
-        OMZP::aws \
-        OMZL::git.zsh \
-  atload"unalias grv" \
-        OMZP::git \
-        https://github.com/junegunn/fzf/raw/master/shell/{'completion','key-bindings'}.zsh \
-        https://github.com/junegunn/fzf-git.sh/blob/main/fzf-git.sh \
-  as"program" \
-        https://github.com/junegunn/fzf/blob/master/bin/fzf-tmux
+    OMZP::aws \
+    OMZL::git.zsh \
+    OMZP::git
 
+# Unalias grv potentially set by OMZ git plugin (run after loading)
+unalias grv &> /dev/null || true
+
+# FZF shell integration (completion & key-bindings) & fzf-git
+zinit snippet https://github.com/junegunn/fzf/raw/master/shell/completion.zsh
+zinit snippet https://github.com/junegunn/fzf/raw/master/shell/key-bindings.zsh
+zinit snippet https://github.com/junegunn/fzf-git.sh/raw/main/fzf-git.sh
 
 # zsh syntax highlighting, suggestions, completions
 zinit wait lucid for \
@@ -44,26 +43,58 @@ zinit wait lucid for \
   blockf atpull'zinit creinstall -q .' \
       zsh-users/zsh-completions
 
-# programs
-zinit lucid from"gh-r" as"command" for \
-    atload'
-        eval "$(zoxide init --cmd j zsh)"
-    ' pick'zoxide/zoxide' \
-        @ajeetdsouza/zoxide \
-    mv'ripgrep* -> rg' pick'rg/rg' \
-        @BurntSushi/ripgrep \
-    mv'bat* -> bat' pick'bat/bat' atload'
-        export MANPAGER="bat --plain"
-    ' \
-        @sharkdp/bat \
-        @junegunn/fzf \
-    mv'**/delta -> delta' \
-        @dandavison/delta \
-    mv'fd* -> fd' pick'fd/fd' \
-        @sharkdp/fd
+# GitHub CLI (gh) completions - only if gh is installed
+# Using trigger-load'0' to load ice-defined snippet via dummy trigger
+if command -v gh &> /dev/null; then
+  zinit ice lucid \
+      as'completion' \
+      atclone:'gh completion -s zsh > _gh' \
+      atpull:'%atclone' \
+      src:'_gh' \
+      id-as:'gh-completions' \
+      trigger-load 0 # Use 0 without quotes, ensure trailing \ if not last ice
+      # Add other ices above this line if needed, ensure they end in \
+  zinit snippet /dev/null # Dummy snippet to trigger the ice block
+fi
 
+# Load FZF binary separately using GitHub Releases
+zinit ice lucid from"gh-r" as"command" pick"fzf"
+zinit load junegunn/fzf
+
+# --- Programs loaded individually via gh-r ---
+
+# zoxide
+zinit ice lucid from"gh-r" as"command" \
+    atload'eval "$(zoxide init --cmd j zsh)"' pick'zoxide/zoxide'
+zinit load ajeetdsouza/zoxide
+
+# ripgrep (rg) - Corrected pick pattern
+zinit ice lucid from"gh-r" as"command" pick"*/rg"
+zinit load BurntSushi/ripgrep
+
+# bat - Corrected pick pattern
+zinit ice lucid from"gh-r" as"command" pick"*/bat" \
+    atload'export MANPAGER="bat --plain"'
+zinit load sharkdp/bat
+
+# fd - Corrected pick pattern
+zinit ice lucid from"gh-r" as"command" pick"*/fd"
+zinit load sharkdp/fd
+
+# delta - Re-introduced with mv and pick
+zinit ice lucid from"gh-r" as"command" mv"delta-* -> delta" pick"*/delta"
+zinit load dandavison/delta
+
+# --- End Programs ---
+
+# General Exports and Custom Scripts
 export XDG_CONFIG_HOME="$HOME/.config"
 # load custom scripts
-for FILE in ~/.config/zsh/scripts/*; do
-    source $FILE
-done
+if [[ -d ~/.config/zsh/scripts ]]; then
+  for FILE in ~/.config/zsh/scripts/*; do
+    [[ -f "$FILE" ]] && source "$FILE"
+  done
+fi
+
+# Ensure compinit is loaded if Zinit's `zicompinit` isn't sufficient or runs too early
+# autoload -Uz compinit && compinit -i
