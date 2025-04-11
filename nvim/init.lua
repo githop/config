@@ -586,6 +586,7 @@ require('lazy').setup({
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
+    main = 'nvim-treesitter.configs',
     opts = {
       -- Add languages to be installed here that you want installed for treesitter
       ensure_installed = { 'lua', 'python', 'ruby', 'tsx', 'typescript', 'graphql', 'json', 'javascript', 'vimdoc', 'vim', 'html', 'css', 'bash' },
