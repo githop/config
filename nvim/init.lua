@@ -377,7 +377,7 @@ require('lazy').setup({
   {
     'saghen/blink.cmp',
     dependencies = 'rafamadriz/friendly-snippets',
-    version = 'v0.*',
+    version = '1.*',
     opts = {
       keymap = {
         preset = 'default',
@@ -390,6 +390,9 @@ require('lazy').setup({
         nerd_font_variant = 'mono',
       },
       signature = { enabled = true },
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+      },
     },
   },
 
