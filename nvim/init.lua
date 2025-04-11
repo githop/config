@@ -192,7 +192,7 @@ require('lazy').setup({
           map('<leader>ws', require('fzf-lua').lsp_live_workspace_symbols, '[W]orkspace [S]ymbols')
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -215,32 +215,42 @@ require('lazy').setup({
             })
           end
 
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
           end
-
-          -- Change diagnostic symbols in the sign column (gutter)
-          if vim.g.have_nerd_font then
-            local signs = { ERROR = '', WARN = '', INFO = '', HINT = '' }
-            local diagnostic_signs = {}
-            for type, icon in pairs(signs) do
-              diagnostic_signs[vim.diagnostic.severity[type]] = icon
-            end
-            vim.diagnostic.config { signs = { text = diagnostic_signs } }
-          end
-
-          vim.diagnostic.config {
-            float = {
-              border = 'rounded',
-            },
-          }
         end,
       })
 
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
+      vim.diagnostic.config {
+        severity_sort = true,
+        float = { border = 'rounded', source = 'if_many' },
+        underline = { severity = vim.diagnostic.severity.ERROR },
+        signs = vim.g.have_nerd_font and {
+          text = {
+            [vim.diagnostic.severity.ERROR] = '󰅚 ',
+            [vim.diagnostic.severity.WARN] = '󰀪 ',
+            [vim.diagnostic.severity.INFO] = '󰋽 ',
+            [vim.diagnostic.severity.HINT] = '󰌶 ',
+          },
+        } or {},
+        virtual_text = {
+          source = 'if_many',
+          spacing = 2,
+          format = function(diagnostic)
+            local diagnostic_message = {
+              [vim.diagnostic.severity.ERROR] = diagnostic.message,
+              [vim.diagnostic.severity.WARN] = diagnostic.message,
+              [vim.diagnostic.severity.INFO] = diagnostic.message,
+              [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+          end,
+        },
+      }
+
+      local capabilities = require('blink-cmp').get_lsp_capabilities()
       local lspconfig = require 'lspconfig'
 
       local servers = {
@@ -328,6 +338,8 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        ensure_installed = {},
+        automatic_installation = false,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -365,15 +377,21 @@ require('lazy').setup({
   {
     'folke/which-key.nvim',
     event = 'VeryLazy', -- Sets the loading event to 'VimEnter'
-    opts = {},
-    spec = {
-      { '<leader>c', group = '[C]ode' },
-      { '<leader>d', group = '[D]ocument' },
-      { '<leader>r', group = '[R]ename' },
-      { '<leader>s', group = '[S]earch' },
-      { '<leader>w', group = '[W]orkspace' },
-      { '<leader>t', group = '[T]oggle' },
-      { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+    opts = {
+      delay = 0,
+      icons = {
+        mappings = vim.g.nerd_font,
+        keys = vim.g.nerd_font,
+      },
+      spec = {
+        { '<leader>c', group = '[C]ode' },
+        { '<leader>d', group = '[D]ocument' },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>s', group = '[S]earch' },
+        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+      },
     },
   },
 
