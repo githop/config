@@ -509,7 +509,22 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require('lualine').setup {
-        options = { theme = 'kanagawa' },
+        options = {
+          theme = 'kanagawa',
+          globalstatus = true,
+        },
+        sections = {
+          lualine_c = {
+            { 'filename', path = 4 },
+          },
+          lualine_x = { 'filetype' },
+          lualine_y = {},
+        },
+        inactive_sections = {
+          lualine_c = {
+            { 'filename', path = 4 },
+          },
+        },
       }
     end,
   },
