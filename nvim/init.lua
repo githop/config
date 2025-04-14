@@ -704,10 +704,6 @@ require('lazy').setup({
       local lint = require 'lint'
 
       lint.linters_by_ft = {
-        javascript = { 'biomejs' },
-        typescript = { 'biomejs' },
-        javascriptreact = { 'biomejs' },
-        typescriptreact = { 'biomejs' },
         scss = { 'stylelint' },
       }
       vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
