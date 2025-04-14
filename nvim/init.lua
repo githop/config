@@ -109,7 +109,7 @@ vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Open float
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- yank filepath relative
-vim.keymap.set('n', '<leader>cf', ":call setreg('+', expand('%:.'))<CR>", { desc = '[c]opy [f]ile path' })
+vim.keymap.set('n', '<leader>cf', ":call setreg('+', expand('%:.'))<CR>", { desc = '[C]opy [F]ile path' })
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
@@ -322,23 +322,11 @@ require('lazy').setup({
         },
         graphql = { filetypes = { 'graphql' } },
         lua_ls = {
-          -- cmd = {...},
-          -- filetypes { ...},
+          -- cmd = { ... },
+          -- filetypes = { ... },
           -- capabilities = {},
           settings = {
             Lua = {
-              runtime = { version = 'LuaJIT' },
-              workspace = {
-                checkThirdParty = false,
-                -- Tells lua_ls where to find all the Lua files that you have loaded
-                -- for your neovim configuration.
-                library = {
-                  '${3rd}/luv/library',
-                  unpack(vim.api.nvim_get_runtime_file('', true)),
-                },
-                -- If lua_ls is really slow on your computer, you can try this instead:
-                -- library = { vim.env.VIMRUNTIME },
-              },
               completion = {
                 callSnippet = 'Replace',
               },
@@ -375,8 +363,21 @@ require('lazy').setup({
   },
 
   {
+    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+    -- used for completion, annotations and signatures of Neovim apis
+    'folke/lazydev.nvim',
+    ft = 'lua',
+    opts = {
+      library = {
+        -- Load luvit types when the `vim.uv` word is found
+        { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      },
+    },
+  },
+
+  {
     'saghen/blink.cmp',
-    dependencies = 'rafamadriz/friendly-snippets',
+    dependencies = { 'afamadriz/friendly-snippets', 'folke/lazydev.nvim' },
     version = '1.*',
     opts = {
       keymap = {
@@ -392,6 +393,9 @@ require('lazy').setup({
       signature = { enabled = true },
       sources = {
         default = { 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+        },
       },
     },
   },
@@ -565,7 +569,6 @@ require('lazy').setup({
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       -- calling `setup` is optional for customization
-      require('fzf-lua').setup { 'fzf-native' }
       require('fzf-lua').setup {
         winopts = {
           height = 0.9,
