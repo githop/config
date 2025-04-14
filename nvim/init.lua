@@ -727,13 +727,13 @@ require('lazy').setup({
 
       conform.setup {
         formatters_by_ft = {
-          javascript = { 'biome' },
-          typescript = { 'biome' },
-          javascriptreact = { 'biome' },
-          typescriptreact = { 'biome' },
+          javascript = { 'prettier' },
+          typescript = { 'prettier' },
+          javascriptreact = { 'prettier' },
+          typescriptreact = { 'prettier' },
           css = { 'prettier' },
           html = { 'prettier' },
-          json = { 'biome' },
+          json = { 'prettier' },
           yaml = { 'prettier' },
           markdown = { 'prettier' },
           graphql = { 'prettier' },
@@ -801,12 +801,12 @@ require('lazy').setup({
       local dashboard = require 'alpha.themes.dashboard'
 
       local header = [[
- ██████╗ ██╗████████╗██╗  ██╗ ██████╗ ██████╗
+ ██████╗ ██╗████████╗██╗  ██╗ ██████╗ ██████╗ 
 ██╔════╝ ██║╚══██╔══╝██║  ██║██╔═══██╗██╔══██╗
 ██║  ███╗██║   ██║   ███████║██║   ██║██████╔╝
-██║   ██║██║   ██║   ██╔══██║██║   ██║██╔═══╝
-╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██║
- ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝
+██║   ██║██║   ██║   ██╔══██║██║   ██║██╔═══╝ 
+╚██████╔╝██║   ██║   ██║  ██║╚██████╔╝██║     
+ ╚═════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝     
       ]]
       dashboard.section.header.val = vim.split(header, '\n')
       dashboard.section.buttons.val = {
