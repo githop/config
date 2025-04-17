@@ -377,7 +377,7 @@ require('lazy').setup({
 
   {
     'saghen/blink.cmp',
-    dependencies = { 'afamadriz/friendly-snippets', 'folke/lazydev.nvim' },
+    dependencies = { 'rafamadriz/friendly-snippets', 'folke/lazydev.nvim' },
     version = '1.*',
     opts = {
       keymap = {
