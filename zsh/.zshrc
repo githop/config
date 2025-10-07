@@ -98,3 +98,5 @@ fi
 
 # Ensure compinit is loaded if Zinit's `zicompinit` isn't sufficient or runs too early
 # autoload -Uz compinit && compinit -i
+
+export EDITOR=nvim
