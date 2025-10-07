@@ -722,6 +722,8 @@ require('lazy').setup({
       lint.linters_by_ft = {
         scss = { 'stylelint' },
         ruby = { 'rubocop' },
+        tsx = { 'eslint' },
+        ts = { 'eslint' },
       }
       vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
         callback = function()
