@@ -11,6 +11,7 @@
 !bat/**
 !wezterm/**
 !ghostty/**
+!opencode/opencode.jsonc
 
 zsh/.zsh_history
 zsh/.zcomp*
