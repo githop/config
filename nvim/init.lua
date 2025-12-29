@@ -60,14 +60,22 @@ vim.o.timeoutlen = 300
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', nbsp = '␣' }
+vim.o.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
+
+-- Minimal number of screen lines to keep above and below the cursor.
+vim.o.scrolloff = 10
+
+-- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
+-- instead raise a dialog asking if you wish to save the current file(s)
+-- See `:help 'confirm'`
+vim.o.confirm = true
 
 -- FOLD
 vim.opt.foldmethod = 'expr'
@@ -80,7 +88,7 @@ vim.opt.foldlevel = 99
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
 -- clear search highlights
-vim.keymap.set('n', '<leader>nh', ':nohl<CR>', { desc = 'Clear search highlights' })
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 --window management
 vim.keymap.set('n', '<leader>sv', '<C-w>v', { desc = 'Split window vertically' })
@@ -117,25 +125,24 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 
--- Install package manager
---    https://github.com/folke/lazy.nvim
---    `:help lazy.nvim.txt` for more info
+-- [[ Install `lazy.nvim` plugin manager ]]
+--    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  }
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
+  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
+  if vim.v.shell_error ~= 0 then
+    error('Error cloning lazy.nvim:\n' .. out)
+  end
 end
-vim.opt.rtp:prepend(lazypath)
+
+---@type vim.Option
+local rtp = vim.opt.rtp
+rtp:prepend(lazypath)
 
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
@@ -151,6 +158,7 @@ require('lazy').setup({
   'tpope/vim-sleuth',
 
   'windwp/nvim-ts-autotag',
+  'NMAC427/guess-indent.nvim',
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -250,7 +258,7 @@ require('lazy').setup({
         },
       }
 
-      local capabilities = require('blink-cmp').get_lsp_capabilities()
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
       local lspconfig = require 'lspconfig'
 
       local servers = {
@@ -693,7 +701,6 @@ require('lazy').setup({
 
       lint.linters_by_ft = {
         scss = { 'stylelint' },
-        ruby = { 'rubocop' },
       }
       vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
         callback = function()

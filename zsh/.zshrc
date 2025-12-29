@@ -87,9 +87,6 @@ zinit load dandavison/delta
 
 # --- End Programs ---
 
-# configure rbenv
-eval "$(rbenv init - zsh)"
-
 # General Exports and Custom Scripts
 export XDG_CONFIG_HOME="$HOME/.config"
 # load custom scripts
@@ -101,3 +98,5 @@ fi
 
 # Ensure compinit is loaded if Zinit's `zicompinit` isn't sufficient or runs too early
 # autoload -Uz compinit && compinit -i
+
+export EDITOR=nvim
