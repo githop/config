@@ -757,25 +757,6 @@ require('lazy').setup({
   },
 
   {
-    'zbirenbaum/copilot.lua',
-    cmd = 'Copilot',
-    event = 'InsertEnter',
-    config = function()
-      require('copilot').setup {
-        panel = {
-          enabled = false,
-        },
-        suggestion = {
-          enabled = true,
-          keymap = {
-            accept = '<C-l>',
-          },
-        },
-      }
-    end,
-  },
-
-  {
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     opts = {},
