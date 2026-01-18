@@ -518,7 +518,7 @@ require('lazy').setup({
     config = function()
       require('lualine').setup {
         options = {
-          theme = 'kanagawa',
+          theme = 'kanagawa-dragon',
           globalstatus = true,
         },
         sections = {
