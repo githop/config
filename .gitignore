@@ -12,6 +12,7 @@
 !wezterm/**
 !ghostty/**
 !opencode/opencode.jsonc
+!opencode/themes/**
 
 zsh/.zsh_history
 zsh/.zcomp*
