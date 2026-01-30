@@ -107,8 +107,12 @@ vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = tr
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 vim.keymap.set('n', '<leader>e', function()
-  require('oil').toggle_float(nil)
-end, { desc = 'Open parent dir' })
+  if MiniFiles.get_explorer_state() then
+    MiniFiles.close()
+  else
+    MiniFiles.open(vim.api.nvim_buf_get_name(0), true)
+  end
+end, { desc = 'Toggle file explorer' })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
@@ -529,6 +533,31 @@ require('lazy').setup({
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
+
+      -- File explorer with column view (Miller columns)
+      require('mini.files').setup {
+        content = {
+          filter = function(entry)
+            return true
+          end,
+        },
+        mappings = {
+          close = 'q',
+          go_in = 'l',
+          go_in_plus = 'L',
+          go_out = 'h',
+          go_out_plus = 'H',
+          reset = '<BS>',
+          reveal_cwd = '@',
+          show_help = 'g?',
+          synchronize = '=',
+          trim_left = '<',
+          trim_right = '>',
+        },
+        options = {
+          use_as_default_explorer = false,
+        },
+      }
     end,
   },
 
@@ -629,36 +658,6 @@ require('lazy').setup({
       highlight = { enable = true },
       indent = { enable = true },
     },
-  },
-
-  {
-    'stevearc/oil.nvim',
-    opts = {},
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      require('oil').setup {
-        win_options = {
-          signcolumn = 'yes:1',
-        },
-        view_options = {
-          show_hidden = true,
-        },
-        float = {
-          padding = 1,
-          max_width = 66,
-        },
-      }
-    end,
-  },
-
-  {
-    'refractalize/oil-git-status.nvim',
-    dependencies = {
-      'stevearc/oil.nvim',
-    },
-    config = function()
-      require('oil-git-status').setup {}
-    end,
   },
 
   {
