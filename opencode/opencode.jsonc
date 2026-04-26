@@ -3,13 +3,6 @@
   "plugin": [
     "opencode-gemini-auth"
   ],
-  "keybinds": {
-    "input_newline": "shift+enter",
-    "messages_half_page_up": "ctrl+k",
-    "messages_half_page_down": "ctrl+j",
-    "messages_page_up": "ctrl+alt+u",
-    "messages_page_down": "ctrl+alt+d"
-  },
   "mcp": {
     "chrome-devtools": {
       "type": "local",
