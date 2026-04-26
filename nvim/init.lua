@@ -170,8 +170,8 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
+      { 'mason-org/mason.nvim', opts = {} },
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       'saghen/blink.cmp',
 
@@ -262,62 +262,49 @@ require('lazy').setup({
         },
       }
 
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-      local lspconfig = require 'lspconfig'
-
       local servers = {
         html = { filetypes = { 'html', 'hbs' } },
         cssls = {},
         jsonls = {},
         pyright = {},
-        yamlls = {
-          settings = {
-            yaml = {
-              format = {
-                enable = true,
-              },
-              customTags = {
-                '!Base64 scalar',
-                '!Cidr scalar',
-                '!And sequence',
-                '!Equals sequence',
-                '!If sequence',
-                '!Not sequence',
-                '!Or sequence',
-                '!Condition scalar',
-                '!FindInMap sequence',
-                '!GetAtt scalar',
-                '!GetAtt sequence',
-                '!GetAZs scalar',
-                '!ImportValue scalar',
-                '!Join sequence',
-                '!Select sequence',
-                '!Split sequence',
-                '!Sub scalar',
-                '!Transform mapping',
-                '!Ref scalar',
-              },
-            },
-          },
-        },
+        yamlls = {},
         graphql = { filetypes = { 'graphql' } },
         lua_ls = {
-          -- cmd = { ... },
-          -- filetypes = { ... },
-          -- capabilities = {},
+          on_init = function(client)
+            client.server_capabilities.documentFormattingProvider = false -- Disable formatting (formatting is done by stylua)
+
+            if client.workspace_folders then
+              local path = client.workspace_folders[1].name
+              if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then
+                return
+              end
+            end
+
+            client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+              runtime = {
+                version = 'LuaJIT',
+                path = { 'lua/?.lua', 'lua/?/init.lua' },
+              },
+              workspace = {
+                checkThirdParty = false,
+                -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
+                --  See https://github.com/neovim/nvim-lspconfig/issues/3189
+                library = vim.tbl_extend('force', vim.api.nvim_get_runtime_file('', true), {
+                  '${3rd}/luv/library',
+                  '${3rd}/busted/library',
+                }),
+              },
+            })
+          end,
+          ---@type lspconfig.settings.lua_ls
           settings = {
             Lua = {
-              completion = {
-                callSnippet = 'Replace',
-              },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              format = { enable = false }, -- Disable formatting (formatting is done by stylua)
             },
           },
         },
       }
 
-      require('mason').setup()
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format lua code
@@ -325,20 +312,10 @@ require('lazy').setup({
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('mason-lspconfig').setup {
-        ensure_installed = {},
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for tsserver)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+      for name, server in pairs(servers) do
+        vim.lsp.config(name, server)
+        vim.lsp.enable(name)
+      end
     end,
   },
 
@@ -362,9 +339,6 @@ require('lazy').setup({
     opts = {
       keymap = {
         preset = 'default',
-        ['<C-k>'] = { 'select_prev', 'fallback' },
-        ['<C-j>'] = { 'select_next', 'fallback' },
-        ['<C-l>'] = { 'select_and_accept', 'fallback' },
       },
       appearance = {
         use_nvim_cmp_as_default = true,
@@ -614,28 +588,6 @@ require('lazy').setup({
         require('fzf-lua').live_grep { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim' })
     end,
-  },
-
-  {
-    -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter-textobjects',
-    },
-    build = ':TSUpdate',
-    main = 'nvim-treesitter.configs',
-    opts = {
-      -- Add languages to be installed here that you want installed for treesitter
-      ensure_installed = { 'lua', 'python', 'ruby', 'tsx', 'typescript', 'graphql', 'json', 'javascript', 'vimdoc', 'vim', 'html', 'css', 'bash' },
-      -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-      auto_install = false,
-
-      autotag = {
-        enable = true,
-      },
-      highlight = { enable = true },
-      indent = { enable = true },
-    },
   },
 
   {
