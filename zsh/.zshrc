@@ -96,3 +96,6 @@ if [[ -d ~/.config/zsh/scripts ]]; then
   done
 fi
 
+
+# bun completions
+[ -s "/home/githop/.bun/_bun" ] && source "/home/githop/.bun/_bun"
