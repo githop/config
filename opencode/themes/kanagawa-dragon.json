@@ -1,0 +1,263 @@
+{
+  "$schema": "https://opencode.ai/theme.json",
+  "defs": {
+    "dragonBlack0": "#0d0c0c",
+    "dragonBlack1": "#12120f",
+    "dragonBlack2": "#1d1c19",
+    "dragonBlack3": "#181616",
+    "dragonBlack4": "#282727",
+    "dragonBlack5": "#393836",
+    "dragonBlack6": "#625e5a",
+    "dragonWhite": "#c5c9c5",
+    "oldWhite": "#C8C093",
+    "dragonGray": "#a6a69c",
+    "dragonGray2": "#9e9b93",
+    "dragonViolet": "#8992a7",
+    "dragonBlue2": "#8ba4b0",
+    "surimiOrange": "#FFA066",
+    "dragonOrange": "#b6927b",
+    "dragonPink": "#a292a3",
+    "dragonGreen": "#87a987",
+    "dragonGreen2": "#8a9a7b",
+    "dragonYellow": "#c4b28a",
+    "dragonRed": "#c4746e",
+    "dragonAqua": "#8ea4a2",
+    "waveBlue1": "#223249",
+    "waveBlue2": "#2D4F67",
+    "winterGreen": "#2B3328",
+    "winterRed": "#43242B",
+    "oniViolet": "#957FB8",
+    "sakuraPink": "#D27E99",
+    "roninYellow": "#FF9E3B",
+    "waveAqua1": "#6A9589",
+    "carpYellow": "#E6C384",
+    "lotusWhite0": "#d5cea3",
+    "lotusWhite1": "#dcd5ac",
+    "lotusWhite2": "#e5ddb0",
+    "lotusWhite3": "#f2ecbc",
+    "lotusWhite4": "#e7dba0",
+    "lotusWhite5": "#e4d794",
+    "lotusInk1": "#545464",
+    "lotusInk2": "#43436c",
+    "lotusGray": "#dcd7ba",
+    "lotusGray2": "#716e61",
+    "lotusGray3": "#8a8980",
+    "lotusGreen": "#6f894e",
+    "lotusGreen2": "#6e915f",
+    "lotusGreen3": "#b7d0ae",
+    "lotusYellow": "#77713f",
+    "lotusYellow2": "#836f4a",
+    "lotusPink": "#b35b79",
+    "lotusOrange": "#cc6d00",
+    "lotusRed": "#c84053",
+    "lotusTeal2": "#6693bf",
+    "lotusBlue1": "#c7d7e0",
+    "lotusBlue2": "#b5cbd2",
+    "lotusBlue4": "#4d699b",
+    "lotusBlue5": "#5d57a3",
+    "lotusAqua": "#597b75",
+    "lotusViolet2": "#766b90"
+  },
+  "theme": {
+    "primary": {
+      "dark": "dragonBlue2",
+      "light": "lotusBlue5"
+    },
+    "secondary": {
+      "dark": "dragonViolet",
+      "light": "lotusViolet2"
+    },
+    "accent": {
+      "dark": "dragonPink",
+      "light": "sakuraPink"
+    },
+    "error": {
+      "dark": "dragonRed",
+      "light": "lotusRed"
+    },
+    "warning": {
+      "dark": "dragonYellow",
+      "light": "lotusOrange"
+    },
+    "success": {
+      "dark": "dragonGreen",
+      "light": "lotusGreen"
+    },
+    "info": {
+      "dark": "dragonAqua",
+      "light": "lotusTeal2"
+    },
+    "text": {
+      "dark": "dragonWhite",
+      "light": "lotusInk1"
+    },
+    "textMuted": {
+      "dark": "dragonGray",
+      "light": "lotusGray2"
+    },
+    "background": {
+      "dark": "dragonBlack3",
+      "light": "lotusWhite0"
+    },
+    "backgroundPanel": {
+      "dark": "dragonBlack4",
+      "light": "lotusWhite2"
+    },
+    "backgroundElement": {
+      "dark": "dragonBlack5",
+      "light": "lotusWhite4"
+    },
+    "border": {
+      "dark": "dragonBlack6",
+      "light": "lotusGray"
+    },
+    "borderActive": {
+      "dark": "dragonOrange",
+      "light": "carpYellow"
+    },
+    "borderSubtle": {
+      "dark": "dragonBlack5",
+      "light": "lotusWhite3"
+    },
+    "diffAdded": {
+      "dark": "dragonGreen",
+      "light": "lotusGreen"
+    },
+    "diffRemoved": {
+      "dark": "dragonRed",
+      "light": "lotusRed"
+    },
+    "diffContext": {
+      "dark": "dragonGray",
+      "light": "lotusGray2"
+    },
+    "diffHunkHeader": {
+      "dark": "waveBlue2",
+      "light": "lotusBlue4"
+    },
+    "diffHighlightAdded": {
+      "dark": "dragonGreen2",
+      "light": "lotusGreen2"
+    },
+    "diffHighlightRemoved": {
+      "dark": "dragonRed",
+      "light": "lotusPink"
+    },
+    "diffAddedBg": {
+      "dark": "winterGreen",
+      "light": "lotusGreen3"
+    },
+    "diffRemovedBg": {
+      "dark": "winterRed",
+      "light": "lotusPink"
+    },
+    "diffContextBg": {
+      "dark": "dragonBlack4",
+      "light": "lotusWhite2"
+    },
+    "diffLineNumber": {
+      "dark": "dragonBlack6",
+      "light": "lotusGray"
+    },
+    "diffAddedLineNumberBg": {
+      "dark": "winterGreen",
+      "light": "lotusGreen3"
+    },
+    "diffRemovedLineNumberBg": {
+      "dark": "winterRed",
+      "light": "lotusPink"
+    },
+    "markdownText": {
+      "dark": "dragonWhite",
+      "light": "lotusInk1"
+    },
+    "markdownHeading": {
+      "dark": "dragonViolet",
+      "light": "lotusViolet2"
+    },
+    "markdownLink": {
+      "dark": "dragonBlue2",
+      "light": "lotusBlue5"
+    },
+    "markdownLinkText": {
+      "dark": "dragonAqua",
+      "light": "lotusAqua"
+    },
+    "markdownCode": {
+      "dark": "dragonGreen",
+      "light": "lotusGreen"
+    },
+    "markdownBlockQuote": {
+      "dark": "dragonGray",
+      "light": "lotusGray2"
+    },
+    "markdownEmph": {
+      "dark": "dragonOrange",
+      "light": "carpYellow"
+    },
+    "markdownStrong": {
+      "dark": "dragonYellow",
+      "light": "roninYellow"
+    },
+    "markdownHorizontalRule": {
+      "dark": "dragonGray",
+      "light": "lotusGray"
+    },
+    "markdownListItem": {
+      "dark": "dragonBlue2",
+      "light": "lotusBlue4"
+    },
+    "markdownListEnumeration": {
+      "dark": "dragonAqua",
+      "light": "lotusAqua"
+    },
+    "markdownImage": {
+      "dark": "dragonBlue2",
+      "light": "lotusBlue4"
+    },
+    "markdownImageText": {
+      "dark": "dragonAqua",
+      "light": "lotusAqua"
+    },
+    "markdownCodeBlock": {
+      "dark": "dragonWhite",
+      "light": "lotusInk1"
+    },
+    "syntaxComment": {
+      "dark": "dragonGray",
+      "light": "lotusGray2"
+    },
+    "syntaxKeyword": {
+      "dark": "dragonViolet",
+      "light": "lotusViolet2"
+    },
+    "syntaxFunction": {
+      "dark": "dragonBlue2",
+      "light": "lotusBlue5"
+    },
+    "syntaxVariable": {
+      "dark": "dragonWhite",
+      "light": "lotusInk1"
+    },
+    "syntaxString": {
+      "dark": "dragonGreen",
+      "light": "lotusGreen"
+    },
+    "syntaxNumber": {
+      "dark": "dragonPink",
+      "light": "lotusPink"
+    },
+    "syntaxType": {
+      "dark": "dragonYellow",
+      "light": "lotusYellow"
+    },
+    "syntaxOperator": {
+      "dark": "dragonPink",
+      "light": "sakuraPink"
+    },
+    "syntaxPunctuation": {
+      "dark": "dragonWhite",
+      "light": "lotusInk2"
+    }
+  }
+}
