@@ -41,8 +41,8 @@ fi
 # from GitHub releases, so they are intentionally NOT installed here)
 log "Installing formulae and casks"
 brew install neovim tmux eza gh gnupg wakeonlan uv fnm lazygit \
-    jesseduffield/lazygit/lazygit gromgit/fuse/sshfs
-brew install --cask ghostty macfuse
+    jesseduffield/lazygit/lazygit
+brew install --cask ghostty
 
 # 5. Nerd Font (IosevkaTerm) used by terminal configs
 log "Installing IosevkaTerm Nerd Font"
@@ -72,6 +72,14 @@ fi
 if [[ "$SHELL" != */zsh ]]; then
     log "Setting zsh as default shell"
     chsh -s "$(command -v zsh)"
+fi
+
+# 10. macFUSE + sshfs (installed last: needs manual System Settings approval
+#     and possibly a reboot; everything else is already set up by now)
+log "Installing macFUSE and sshfs (may require approval/reboot)"
+if ! brew install --cask macfuse || ! brew install gromgit/fuse/sshfs; then
+    echo "macFUSE/sshfs install failed — approve the system extension in"
+    echo "System Settings, reboot if prompted, then re-run this script."
 fi
 
 log "Done! Open a new terminal (Ghostty recommended). Neovim plugins will auto-install via lazy.nvim on first launch."
