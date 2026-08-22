@@ -41,7 +41,7 @@ Configuration files for several modern terminal emulators, ensuring a consistent
 
 ### 🎨 Theme & Fonts
 - **Color Scheme:** Kanagawa Dragon (dark, high-contrast variant).
-- **Typography:** [IosevkaTerm Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts) (Medium weight, 20.5pt).
+- **Typography:** [Monaspace Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts) (MonaspiceNe, installed via `setup.sh`).
 
 ## 📁 Structure
 

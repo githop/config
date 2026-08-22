@@ -52,9 +52,9 @@ log "Installing formulae and casks"
 brew install neovim tmux eza gh gnupg wakeonlan uv fnm lazygit
 brew install --cask ghostty
 
-# 5. Nerd Font (IosevkaTerm) used by terminal configs
-log "Installing IosevkaTerm Nerd Font"
-brew install --cask font-iosevka-term-nerd-font
+# 5. Nerd Font (Monaspace) used by terminal configs
+log "Installing Monaspace Nerd Font"
+brew install --cask font-monaspace-nerd-font
 
 # 6. Node.js via fnm + pnpm (used by zsh scripts)
 log "Setting up Node.js (fnm)"
