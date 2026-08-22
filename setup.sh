@@ -49,8 +49,7 @@ fi
 # (starship, fzf, zoxide, ripgrep, bat, fd, delta are installed by zinit
 # from GitHub releases, so they are intentionally NOT installed here)
 log "Installing formulae and casks"
-brew install neovim tmux eza gh gnupg wakeonlan uv fnm lazygit \
-    jesseduffield/lazygit/lazygit
+brew install neovim tmux eza gh gnupg wakeonlan uv fnm lazygit
 brew install --cask ghostty
 
 # 5. Nerd Font (IosevkaTerm) used by terminal configs
@@ -86,7 +85,7 @@ fi
 # 10. macFUSE + sshfs (installed last: needs manual System Settings approval
 #     and possibly a reboot; everything else is already set up by now)
 log "Installing macFUSE and sshfs (may require approval/reboot)"
-if ! brew install --cask macfuse || ! brew install gromgit/fuse/sshfs; then
+if ! brew install --cask macfuse sshfs; then
     echo "macFUSE/sshfs install failed — approve the system extension in"
     echo "System Settings, reboot if prompted, then re-run this script."
 fi
