@@ -9,6 +9,15 @@ CONFIG_DIR="$HOME/.config"
 
 log() { printf '\n\033[1;36m==> %s\033[0m\n' "$*"; }
 
+# Re-attach to the terminal when run via `curl | bash` (stdin is the pipe,
+# so interactive prompts like Homebrew's sudo request would fail otherwise)
+if [[ ! -t 0 ]]; then
+    SELF="$(mktemp)"
+    cat >"$SELF"
+    chmod +x "$SELF"
+    exec bash "$SELF" </dev/tty
+fi
+
 # 1. Xcode Command Line Tools (provides git)
 if ! xcode-select -p &>/dev/null; then
     log "Installing Xcode Command Line Tools"
