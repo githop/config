@@ -13,6 +13,8 @@
 !ghostty/**
 !opencode/opencode.jsonc
 !opencode/themes/**
+!setup.sh
+!/README.md
 
 zsh/.zsh_history
 zsh/.zcomp*
